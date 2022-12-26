@@ -226,3 +226,11 @@ Qed.
 Definition not := fun (p : Prop) => (stroke p p).
 Definition or := fun (p q : Prop) => (stroke (stroke p p) (stroke q q)).
 Definition impl := fun (p q : Prop) => (or (not p) q).
+
+Theorem mp : forall {p q : Prop} (min : p) (maj : (impl p q)), q.
+Proof.
+    intros.
+    pose (S1 := (scharle24 p (stroke p p))).
+    pose (S2 := (ax_mp min S1)).
+    exact (ax_mp S2 maj).
+Qed.
