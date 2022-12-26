@@ -222,3 +222,7 @@ Proof.
     pose (S1 := (scharle7 (stroke (stroke (stroke p p) s) (stroke (stroke p p) s)) p)).
     exact (ax_mp (scharle31 p s) S1).
 Qed.
+
+Definition not := fun (p : Prop) => (stroke p p).
+Definition or := fun (p q : Prop) => (stroke (stroke p p) (stroke q q)).
+Definition impl := fun (p q : Prop) => (or (not p) q).
