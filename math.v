@@ -223,6 +223,54 @@ Proof.
     exact (ax_mp (scharle31 p s) S1).
 Qed.
 
+Theorem nicod_assoc : forall (p q r : Prop), (stroke (stroke p (stroke (stroke q r) (stroke q r))) (stroke (stroke q (stroke (stroke p r) (stroke p r))) (stroke q (stroke (stroke p r) (stroke p r))))).
+Proof.
+    assert (L : forall (p q : Prop), (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))).
+    {
+        intros.
+        pose (L1 := (scharle21 p q q p)).
+        pose (S1 := (scharle24 q p)).
+        pose (S2 := (scharle21 q (stroke p (stroke q q)) (stroke p (stroke q q)) (stroke (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q p) (stroke (stroke p p) (stroke p p)))))).
+        pose (S3 := (ax_mp S1 S2)).
+        pose (L2 := (ax_mp L1 S3)).
+        pose (L3 := (scharle21 (stroke q p) (stroke p p) (stroke p p) p)).
+        pose (S4 := (scharle24 (stroke (stroke p p) p) q)).
+        pose (L4 := (ax_mp (scharle8 p) S4)).
+        pose (S5 := (scharle21 q (stroke (stroke p p) p) (stroke (stroke p p) p) (stroke (stroke (stroke q p ) p) (stroke (stroke q p ) p)))).
+        pose (S6 := (ax_mp L4 S5)).
+        pose (S7 := (scharle21 (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke (stroke p p) p) (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke (stroke (stroke p p) p) (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+        pose (S8 := (ax_mp L3 S7)).
+        pose (S9 := (ax_mp S6 S8)).
+        pose (S10 := (scharle21 q (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+        pose (S11 := (ax_mp L2 S10)).
+        pose (LA := (ax_mp S9 S11)).
+        pose (S12 := (scharle12 q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))).
+        pose (S13 := (scharle21 (stroke q q) (stroke (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) (stroke (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+        pose (S14 := (ax_mp S12 S13)).
+        pose (S15 := (ax_mp (scharle7 (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) S14)).
+        pose (LB := (ax_mp S15 (scharle7 (stroke q q) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))))))).
+        pose (S16 := (scharle21 (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))) q q (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+        pose (S17 := (ax_mp LB S16)).
+        pose (S18 := (ax_mp LA S17)).
+        exact (ax_mp S18 (scharle8 (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+    }
+    intros.
+    pose (S1 := (scharle21 q (stroke (stroke q r) r) (stroke (stroke q r) r) (stroke (stroke p r) (stroke p r)))).
+    pose (S2 := (ax_mp (L r q) S1)).
+    pose (S3 := (scharle21 p (stroke q r) (stroke q r) r)).
+    pose (S4 := (scharle21 (stroke p (stroke (stroke q r) (stroke q r))) (stroke (stroke (stroke q r) r) (stroke (stroke p r) (stroke p r))) (stroke (stroke (stroke q r) r) (stroke (stroke p r) (stroke p r))) (stroke (stroke q (stroke (stroke p r) (stroke p r))) (stroke q (stroke (stroke p r) (stroke p r)))))).
+    pose (S5 := (ax_mp S3 S4)).
+    exact (ax_mp S2 S5).
+Qed.
+
+Theorem nicod_sum : forall (p q r : Prop), (stroke (stroke q (stroke r r)) (stroke (stroke (stroke (stroke p p) (stroke q q)) (stroke (stroke (stroke p p) (stroke r r)) (stroke (stroke p p) (stroke r r)))) (stroke (stroke (stroke p p) (stroke q q)) (stroke (stroke (stroke p p) (stroke r r)) (stroke (stroke p p) (stroke r r)))))).
+Proof.
+    intros.
+    pose (S1 := (nicod_assoc (stroke (stroke p p) (stroke q q)) (stroke q (stroke r r)) (stroke (stroke (stroke p p) (stroke r r)) (stroke (stroke p p) (stroke r r))))).
+    pose (S2 := (scharle21 (stroke p p) q q (stroke r r))).
+    exact (ax_mp S2 S1).
+Qed.
+
 Definition not := fun (p : Prop) => (stroke p p).
 Definition or := fun (p q : Prop) => (stroke (stroke p p) (stroke q q)).
 Definition impl := fun (p q : Prop) => (or (not p) q).
