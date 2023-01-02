@@ -282,3 +282,65 @@ Proof.
     pose (S2 := (ax_mp min S1)).
     exact (ax_mp S2 maj).
 Qed.
+
+Theorem pm_taut : forall (p : Prop), (impl (or p p) p).
+Proof.
+    intros.
+    pose (S1 := (scharle8 (stroke (or p p) (or p p)))).
+    pose (S2 := (scharle8 (stroke p p))).
+    pose (S3 := (scharle21 (stroke (stroke (or p p) (or p p)) (stroke (or p p) (or p p))) (or p p) (or p p) (stroke p p))).
+    pose (S4 := (ax_mp S1 S3)).
+    exact (ax_mp S2 S4).
+Qed.
+
+Theorem pm_add : forall (p q : Prop), (impl q (or p q)).
+Proof.
+    intros.
+    pose (S1 := (scharle24 q (stroke p p))).
+    pose (S2 := (scharle8 (stroke q q))).
+    pose (S3 := (scharle21 (stroke (stroke q q) (stroke q q)) q q (stroke (or p q) (or p q)))).
+    pose (S4 := (ax_mp S2 S3)).
+    exact (ax_mp S1 S4).
+Qed.
+
+Theorem pm_perm : forall (p q : Prop), (impl (or p q) (or q p)).
+Proof.
+    intros.
+    pose (S1 := (scharle7 (stroke p p) (stroke q q))).
+    pose (S2 := (scharle8 (stroke (or p q) (or p q)))).
+    pose (S3 := (scharle21 (stroke (stroke (or p q) (or p q)) (stroke (or p q) (or p q))) (or p q) (or p q) (stroke (or q p) (or q p)))).
+    pose (S4 := (ax_mp S2 S3)).
+    exact (ax_mp S1 S4).
+Qed.
+
+Theorem pm_assoc : forall (p q r : Prop), (impl (or p (or q r)) (or q (or p r))).
+Proof.
+    intros.
+    pose (S1 := (nicod_assoc (stroke p p) (stroke q q) (stroke r r))).
+    pose (S2 := (scharle8 (stroke (or p (or q r)) (or p (or q r))))).
+    pose (S3 := (scharle21 (stroke (stroke (or p (or q r)) (or p (or q r))) (stroke (or p (or q r)) (or p (or q r)))) (or p (or q r)) (or p (or q r)) (stroke (or q (or p r)) (or q (or p r))))).
+    pose (S4 := (ax_mp S2 S3)).
+    exact (ax_mp S1 S4).
+Qed.
+
+Theorem pm_sum : forall (p q r : Prop), (impl (impl q r) (impl (or p q) (or p r))).
+Proof.
+    intros.
+    pose (S1 := (nicod_sum p q r)).
+    pose (S2 := (scharle8 (stroke (or p q) (or p q)))).
+    pose (S3 := (scharle21 (stroke (stroke (or p q) (or p q)) (stroke (or p q) (or p q))) (or p q) (or p q) (stroke (or p r) (or p r)))).
+    pose (S4 := (ax_mp S2 S3)).
+    pose (S5 := (scharle21 (stroke q (stroke r r)) (stroke (or p q) (stroke (or p r) (or p r))) (stroke (or p q) (stroke (or p r) (or p r))) (stroke (impl (or p q) (or p r)) (impl (or p q) (or p r))))).
+    pose (S6 := (ax_mp S1 S5)).
+    pose (S7 := (ax_mp S4 S6)).
+    pose (S8 := (scharle24 q (stroke q q))).
+    pose (S9 := (scharle21 q (stroke (stroke q q) (stroke q q)) (stroke (stroke q q) (stroke q q)) (stroke r r))).
+    pose (S10 := (ax_mp S8 S9)).
+    pose (S11 := (scharle21 (impl q r) (stroke q (stroke r r)) (stroke q (stroke r r)) (stroke (impl (or p q) (or p r)) (impl (or p q) (or p r))))).
+    pose (S12 := (ax_mp S10 S11)).
+    pose (S13 := (ax_mp S7 S12)).
+    pose (S14 := (scharle8 (stroke (impl q r) (impl q r)))).
+    pose (S15 := (scharle21 (stroke (stroke (impl q r) (impl q r)) (stroke (impl q r) (impl q r))) (impl q r) (impl q r) (stroke (impl (or p q) (or p r)) (impl (or p q) (or p r))))).
+    pose (S16 := (ax_mp S14 S15)).
+    exact (ax_mp S13 S16).
+Qed.
