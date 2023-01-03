@@ -275,7 +275,7 @@ Definition not := fun (p : Prop) => (stroke p p).
 Definition or := fun (p q : Prop) => (stroke (stroke p p) (stroke q q)).
 Definition impl := fun (p q : Prop) => (or (not p) q).
 
-Theorem mp : forall {p q : Prop} (min : p) (maj : (impl p q)), q.
+Theorem pm1_1 : forall {p q : Prop} (min : p) (maj : (impl p q)), q.
 Proof.
     intros.
     pose (S1 := (scharle24 p (stroke p p))).
@@ -283,7 +283,13 @@ Proof.
     exact (ax_mp S2 maj).
 Qed.
 
-Theorem pm_taut : forall (p : Prop), (impl (or p p) p).
+Theorem mp : forall {p q : Prop} (min : p) (maj : (impl p q)), q.
+Proof.
+    intros.
+    exact (pm1_1 min maj).
+Qed.
+
+Theorem pm1_2 : forall (p : Prop), (impl (or p p) p).
 Proof.
     intros.
     pose (S1 := (scharle8 (stroke (or p p) (or p p)))).
@@ -293,7 +299,13 @@ Proof.
     exact (ax_mp S2 S4).
 Qed.
 
-Theorem pm_add : forall (p q : Prop), (impl q (or p q)).
+Theorem pm_taut : forall (p : Prop), (impl (or p p) p).
+Proof.
+    intros.
+    exact (pm1_2 p).
+Qed.
+
+Theorem pm1_3 : forall (p q : Prop), (impl q (or p q)).
 Proof.
     intros.
     pose (S1 := (scharle24 q (stroke p p))).
@@ -303,7 +315,13 @@ Proof.
     exact (ax_mp S1 S4).
 Qed.
 
-Theorem pm_perm : forall (p q : Prop), (impl (or p q) (or q p)).
+Theorem pm_add : forall (p q : Prop), (impl q (or p q)).
+Proof.
+    intros.
+    exact (pm1_3 p q).
+Qed.
+
+Theorem pm1_4 : forall (p q : Prop), (impl (or p q) (or q p)).
 Proof.
     intros.
     pose (S1 := (scharle7 (stroke p p) (stroke q q))).
@@ -313,7 +331,13 @@ Proof.
     exact (ax_mp S1 S4).
 Qed.
 
-Theorem pm_assoc : forall (p q r : Prop), (impl (or p (or q r)) (or q (or p r))).
+Theorem pm_perm : forall (p q : Prop), (impl (or p q) (or q p)).
+Proof.
+    intros.
+    exact (pm1_4 p q).
+Qed.
+
+Theorem pm1_5 : forall (p q r : Prop), (impl (or p (or q r)) (or q (or p r))).
 Proof.
     intros.
     pose (S1 := (nicod_assoc (stroke p p) (stroke q q) (stroke r r))).
@@ -323,7 +347,13 @@ Proof.
     exact (ax_mp S1 S4).
 Qed.
 
-Theorem pm_sum : forall (p q r : Prop), (impl (impl q r) (impl (or p q) (or p r))).
+Theorem pm_assoc : forall (p q r : Prop), (impl (or p (or q r)) (or q (or p r))).
+Proof.
+    intros.
+    exact (pm1_5 p q r).
+Qed.
+
+Theorem pm1_6 : forall (p q r : Prop), (impl (impl q r) (impl (or p q) (or p r))).
 Proof.
     intros.
     pose (S1 := (nicod_sum p q r)).
@@ -343,4 +373,10 @@ Proof.
     pose (S15 := (scharle21 (stroke (stroke (impl q r) (impl q r)) (stroke (impl q r) (impl q r))) (impl q r) (impl q r) (stroke (impl (or p q) (or p r)) (impl (or p q) (or p r))))).
     pose (S16 := (ax_mp S14 S15)).
     exact (ax_mp S13 S16).
+Qed.
+
+Theorem pm_sum : forall (p q r : Prop), (impl (impl q r) (impl (or p q) (or p r))).
+Proof.
+    intros.
+    exact (pm1_6 p q r).
 Qed.
