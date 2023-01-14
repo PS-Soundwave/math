@@ -343,7 +343,7 @@ Proof.
     exact (pm1_4 p q).
 Qed.
 
-Theorem or_perm : forall (p q : Prop), (impl (or p q) (or q p)).
+Theorem or_comm : forall (p q : Prop), (impl (or p q) (or q p)).
 Proof.
     intros.
     exact (pm_perm p q).
@@ -927,7 +927,7 @@ Qed.
 Theorem pm2_75 : forall (p q r : Prop), (impl (or p q) (impl (or p (impl q r)) (or p r))).
 Proof.
     intros.
-    exact (syll (or_perm p q) (syll (syll (pm2_53 q p) (pm2_74 p (not q) r)) (impl_subl (pm2_31 p (not q) r) (or p r)))).
+    exact (syll (or_comm p q) (syll (syll (pm2_53 q p) (pm2_74 p (not q) r)) (impl_subl (pm2_31 p (not q) r) (or p r)))).
 Qed.
 
 
