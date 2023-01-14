@@ -321,10 +321,10 @@ Proof.
     exact (pm1_3 p q).
 Qed.
 
-Theorem orr : forall (p : Prop) {q : Prop} (H : q), (or p q).
+Theorem orr : forall (p q : Prop), (impl q (or p q)).
 Proof.
     intros.
-    exact (mp H (pm_add p q)).
+    exact (pm_add p q).
 Qed.
 
 Theorem pm1_4 : forall (p q : Prop), (impl (or p q) (or q p)).
@@ -411,10 +411,10 @@ Proof.
     exact (pm_add (not p) q).
 Qed.
 
-Theorem implr : forall (p : Prop) {q : Prop} (H : q), (impl p q).
+Theorem implr : forall (p q : Prop), (impl q (impl p q)).
 Proof.
     intros.
-    exact (mp H (pm2_02 p q)).
+    exact (pm2_02 p q).
 Qed.
 
 Theorem pm2_03 : forall (p q : Prop), (impl (impl p (not q)) (impl q (not p))).
@@ -616,10 +616,10 @@ Proof.
     exact (syll S1 S2).
 Qed.
 
-Theorem orl : forall {p : Prop} (H : p) (q : Prop), (or p q).
+Theorem orl : forall (p q : Prop), (impl p (or p q)).
 Proof.
     intros.
-    exact (mp H (pm2_2 p q)).
+    exact (pm2_2 p q).
 Qed.
 
 Theorem pm2_21 : forall (p q : Prop), (impl (not p) (impl p q)).
@@ -628,22 +628,16 @@ Proof.
     exact (pm2_2 (not p) q).
 Qed.
 
-Theorem impll : forall {p : Prop} (H : (not p)) (q : Prop), (impl p q).
+Theorem impll : forall (p q : Prop), (impl (not p) (impl p q)).
 Proof.
     intros.
-    exact (mp H (pm2_21 p q)).
+    exact (pm2_21 p q).
 Qed.
 
 Theorem pm2_24 : forall (p q : Prop), (impl p (impl (not p) q)).
 Proof.
     intros.
     exact (mp (pm2_21 p q) (pm_comm (not p) p q)).
-Qed.
-
-Theorem contra : forall {p : Prop} (H0 : p) (H1 : (not p)) (q : Prop), q.
-Proof.
-    intros.
-    exact (mp H1 (mp H0 (pm2_24 p q))).
 Qed.
 
 Theorem pm2_25 : forall (p q : Prop), (or p (impl (or p q) q)).
@@ -851,14 +845,6 @@ Theorem pm2_61 : forall (p q : Prop), (impl (impl p q) (impl (impl (not p) q) q)
 Proof.
     intros.
     exact (mp (pm2_6 p q) (pm_comm (impl (not p) q) (impl p q) q)).
-Qed.
-
-Theorem or_destruct : forall {p q r : Prop} (H0 : (or p q)) (H1 : (impl p r)) (H2 : (impl q r)), r.
-Proof.
-    intros.
-    pose (S1 := (mp H0 (pm2_53 p q))).
-    pose (S2 := (syll S1 H2)).
-    exact (mp S2 (mp H1 (pm2_61 p r))).
 Qed.
 
 Theorem pm2_62 : forall (p q : Prop), (impl (or p q) (impl (impl p q) q)).
