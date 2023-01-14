@@ -591,7 +591,7 @@ Proof.
     exact (syll S1 S3).
 Qed.
 
-Theorem pm_transp4 : forall (p q : Prop), (impl (impl (not p) (not q)) (impl q p)).
+Theorem pm_transp3 : forall (p q : Prop), (impl (impl (not p) (not q)) (impl q p)).
 Proof.
     intros.
     exact (pm2_17 q p).
