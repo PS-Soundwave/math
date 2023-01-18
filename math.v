@@ -1312,16 +1312,18 @@ Proof.
     exact (syll S5 (mp (pm2_53 q r) (pm_syll (or q r) (impl (not q) r) p))).
 Qed.
 
-Theorem ore : forall {p q r : Prop} (H0 : (impl p r)) (H1 : (impl q r)), (impl (or p q) r).
+Theorem ore : forall {p q r s : Prop} (H0 : (impl p (or q r))) (H1 : (impl p (impl q s))) (H2 : (impl p (impl r s))), (impl p s).
 Proof.
     intros.
-    exact (mp (andii H0 H1) (pm3_44 r p q)).
+    pose (S1 := (andi H1 H2)).
+    pose (S2 := (syll S1 (pm3_44 s q r))).
+    exact (mpc H0 S2).
 Qed.
 
 Theorem orei : forall {p q r : Prop} (H0 : (or p q)) (H1 : (impl p r)) (H2 : (impl q r)), r.
 Proof.
     intros.
-    exact (mp H0 (ore H1 H2)).
+    exact (mp H0 (mp (andii H1 H2) (pm3_44 r p q))).
 Qed.
 
 Theorem pm3_45 : forall (p q r : Prop), (impl (impl p q) (impl (and p r) (and q r))).
