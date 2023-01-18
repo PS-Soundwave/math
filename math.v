@@ -1546,6 +1546,8 @@ Proof.
     exact (andii (pm2_32 p q r) (pm2_31 p q r)).
 Qed.
 
+Definition and3 := fun (p q r : Prop) => (and (and p q) r).
+
 Theorem pm4_36 : forall (p q r : Prop), (impl (bi p q) (bi (and p r) (and q r))).
 Proof.
     intros.
@@ -1792,5 +1794,157 @@ Admitted.
 Definition bi4 := fun (p q r s : Prop) => (and (and (bi p q) (bi q r)) (bi r s)).
 
 Theorem pm4_87 : forall (p q r : Prop), (bi4 (impl (and p q) r) (impl p (impl q r)) (impl q (impl p r)) (impl (and q p) r)).
+Proof.
+Admitted.
+
+Theorem pm5_1 : forall (p q : Prop), (impl (and p q) (bi p q)).
+Proof.
+Admitted.
+
+Theorem pm5_11 : forall (p q : Prop), (or (impl p q) (impl (not p) q)).
+Proof.
+Admitted.
+
+Theorem pm5_12 : forall (p q : Prop), (or (impl p q) (impl p (not q))).
+Proof.
+Admitted.
+
+Theorem pm5_13 : forall (p q : Prop), (or (impl p q) (impl q p)).
+Proof.
+Admitted.
+
+Theorem pm5_14 : forall (p q r : Prop), (or (impl p q) (impl q r)).
+Proof.
+Admitted.
+
+Theorem pm5_15 : forall (p q : Prop), (or (bi p q) (bi p (not q))).
+Proof.
+Admitted.
+
+Theorem pm5_16 : forall (p q : Prop), (not (and (bi p q) (bi p (not q)))).
+Proof.
+Admitted.
+
+Theorem pm5_17 : forall (p q : Prop), (bi (and (or p q) (not (and p q))) (bi p (not q))).
+Proof.
+Admitted.
+
+Theorem pm5_18 : forall (p q : Prop), (bi (bi p q) (not (bi p (not q)))).
+Proof.
+Admitted.
+
+Theorem pm5_19 : forall (p : Prop), (not (bi p (not p))).
+Proof.
+Admitted.
+
+Theorem pm5_21 : forall (p q : Prop), (impl (and (not p) (not q)) (bi p q)).
+Proof.
+Admitted.
+
+Theorem pm5_22 : forall (p q : Prop), (bi (not (bi p q)) (or (and p (not q)) (and q (not p)))).
+Proof.
+Admitted.
+
+Theorem pm5_23 : forall (p q : Prop), (bi (bi p q) (or (and p q) (and (not p) (not q)))).
+Proof.
+Admitted.
+
+Theorem pm5_24 : forall (p q : Prop), (bi (not (or (and p q) (and (not p) (not q)))) (or (and p (not q)) (and (not p) q))).
+Proof.
+Admitted.
+
+Theorem pm5_25 : forall (p q : Prop), (bi (or p q) (impl (impl p q) q)).
+Proof.
+Admitted.
+
+Theorem pm5_3 : forall (p q r : Prop), (bi (impl (and p q) r) (impl (and p q) (and p r))).
+Proof.
+Admitted.
+
+Theorem pm5_31 : forall (p q r : Prop), (impl (and r (impl p q)) (impl p (and q r))).
+Proof.
+Admitted.
+
+Theorem pm5_32 : forall (p q r : Prop), (bi (impl p (bi q r)) (bi (and p q) (and p r))).
+Proof.
+Admitted.
+
+Theorem pm5_33 : forall (p q r : Prop), (bi (and p (impl q r)) (and p (impl (and p q) r))).
+Proof.
+Admitted.
+
+Theorem pm5_35 : forall (p q r : Prop), (impl (and (impl p q) (impl p r)) (impl p (bi q r))).
+Proof.
+Admitted.
+
+Theorem pm5_36 : forall (p q r : Prop), (bi (and p (bi p q)) (and q (bi p q))).
+Proof.
+Admitted.
+
+Theorem pm5_4 : forall (p q : Prop), (bi (impl p (impl p q)) (impl p q)).
+Proof.
+Admitted.
+
+Theorem pm5_41 : forall (p q r : Prop), (bi (impl (impl p q) (impl p r)) (impl p (impl q r))).
+Proof.
+Admitted.
+
+Theorem pm5_42 : forall (p q r : Prop), (bi (impl p (impl q r)) (impl p (impl q (and p r)))).
+Proof.
+Admitted.
+
+Theorem pm5_44 : forall (p q r : Prop), (impl (impl p q) (bi (impl p r) (impl p (and q r)))).
+Proof.
+Admitted.
+
+Theorem pm5_5 : forall (p q : Prop), (impl p (bi (impl p q) q)).
+Proof.
+Admitted.
+
+Theorem pm5_501 : forall (p q : Prop), (impl p (bi q (bi p q))).
+Proof.
+Admitted.
+
+Theorem pm5_53 : forall (p q r s : Prop), (bi (impl (or3 p q r) s) (and3 (impl p s) (impl q s) (impl r s))).
+Proof.
+Admitted.
+
+Theorem pm5_54 : forall (p q : Prop), (or (bi (and p q) p) (bi (and p q) q)).
+Proof.
+Admitted.
+
+Theorem pm5_55 : forall (p q : Prop), (or (bi (or p q) p) (bi (or p q) q)).
+Proof.
+Admitted.
+
+Theorem pm5_6 : forall (p q r : Prop), (bi (impl (and p (not q)) r) (impl p (or q r))).
+Proof.
+Admitted.
+
+Theorem pm5_61 : forall (p q : Prop), (bi (and (or p q) (not q)) (and p (not q))).
+Proof.
+Admitted.
+
+Theorem pm5_62 : forall (p q : Prop), (bi (or (and p q) (not q)) (or p (not q))).
+Proof.
+Admitted.
+
+Theorem pm5_63 : forall (p q : Prop), (bi (or p q) (or p (and (not p) q))).
+Proof.
+Admitted.
+
+Theorem pm5_7 : forall (p q r : Prop), (bi (bi (or p r) (or q r)) (or r (bi p q))).
+Proof.
+Admitted.
+
+Theorem pm5_71 : forall (p q r : Prop), (impl (impl q (not r)) (bi (and (or p q) r) (and p r))).
+Proof.
+Admitted.
+
+Theorem pm5_74 : forall (p q r : Prop), (bi (impl p (bi q r)) (bi (impl p q) (impl p r))).
+Proof.
+Admitted.
+
+Theorem pm5_75 : forall (p q r : Prop), (impl (and (impl r (not q)) (bi p (or q r))) (bi (and p (not q)) r)).
 Proof.
 Admitted.
