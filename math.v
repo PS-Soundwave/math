@@ -1289,6 +1289,12 @@ Proof.
     exact (mp S3 (pm_imp (impl p q) (impl p r) (impl p (and q r)))).
 Qed.
 
+Theorem pm_comp : forall (p q r : Prop), (impl (and (impl p q) (impl p r)) (impl p (and q r))).
+Proof.
+    intros.
+    exact (pm3_43 p q r).
+Qed.
+
 Theorem andi : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (impl p r)), (impl p (and q r)).
 Proof.
     intros.
@@ -1377,4 +1383,264 @@ Proof.
     pose (S5 := (syll S4 (pm_sum r q s))).
     pose (S6 := (syll S5 (mp (pm_perm q r) (pm_syll (or q r) (or r q) (or r s))))).
     exact (mp S6 (mp S3 (pm2_83 (and (impl p r) (impl q s)) (or p q) (or q r) (or r s)))).
+Qed.
+
+Definition bi := fun (p q : Prop) => (and (impl p q) (impl q p)).
+
+Theorem pm4_1 : forall (p q : Prop), (bi (impl p q) (impl (not q) (not p))).
+Proof.
+    intros.
+    exact (andii (pm2_16 p q) (pm2_17 p q)).
+Qed.
+
+Theorem pm4_11 : forall (p q : Prop), (bi (bi p q) (bi (not p) (not q))).
+Proof.
+    intros.
+    exact (andii (syll (mp (andii (pm2_16 p q) (pm2_16 q p)) (pm3_47 (impl p q) (impl q p) (impl (not q) (not p)) (impl (not p) (not q)))) (pm3_22 (impl (not q) (not p)) (impl (not p) (not q)))) (syll (mp (andii (pm2_17 q p) (pm2_17 p q)) (pm3_47 (impl (not p) (not q)) (impl (not q) (not p)) (impl q p) (impl p q))) (pm3_22 (impl q p) (impl p q)))).
+Qed.
+
+Theorem pm4_12 : forall (p q : Prop), (bi (bi p (not q)) (bi q (not p))).
+Proof.
+    intros.
+    exact (andii (mp (andii (pm2_03 p q) (pm2_15 q p)) (pm3_47 (impl p (not q)) (impl (not q) p) (impl q (not p)) (impl (not p) q))) (mp (andii (pm2_03 q p) (pm2_15 p q)) (pm3_47 (impl q (not p)) (impl (not p) q) (impl p (not q)) (impl (not q) p)))).
+Qed.
+
+Theorem pm4_13 : forall (p : Prop), (bi p (not (not p))).
+Proof.
+    intros.
+    exact (andii (pm2_12 p) (pm2_14 p)).
+Qed.
+
+Theorem pm4_14 : forall (p q r : Prop), (bi (impl (and p q) r) (impl (and p (not r)) (not q))).
+Proof.
+    intros.
+    exact (andii (pm3_37 p q r) (syll (syll (pm3_37 p (not r) (not q)) (impl_subr (anderi (pm4_13 r)) (and p (not (not q))))) (impl_subl (and_subr (andeli (pm4_13 q)) p) r))).
+Qed.
+
+Theorem pm4_15 : forall (p q r : Prop), (bi (impl (and p q) (not r)) (impl (and q r) (not p))).
+Proof.
+    intros.
+    exact (andii (syll (syll (impl_subl (and_comm q p) (not r)) (andeli (pm4_14 q p (not r)))) (impl_subl (and_subr (andeli (pm4_13 r)) q) (not p))) (syll (impl_subl (and_subr (anderi (pm4_13 r)) q) (not p)) (syll (anderi (pm4_14 q p (not r))) (impl_subl (pm3_22 p q) (not r))))).
+Qed.
+
+Theorem pm4_2 : forall (p : Prop), (bi p p).
+Proof.
+    intros.
+    exact (mp (id p) (mp (id p) (pm3_2 (impl p p) (impl p p)))).
+Qed.
+
+Theorem bi_id : forall (p : Prop), (bi p p).
+Proof.
+    intros.
+    exact (pm4_2 p).
+Qed.
+
+Theorem pm4_21 : forall (p q : Prop), (bi (bi p q) (bi q p)).
+Proof.
+    intros.
+    exact (andii (pm3_22 (impl p q) (impl q p)) (pm3_22 (impl q p) (impl p q))).
+Qed.
+
+Theorem bi_comm : forall (p q : Prop), (impl (bi p q) (bi q p)).
+Proof.
+    intros.
+    exact (andeli (pm4_21 p q)).
+Qed.
+
+Theorem bi_commi : forall {p q : Prop} (H : (bi p q)), (bi q p).
+Proof.
+    intros.
+    exact (mp H (bi_comm p q)).
+Qed.
+
+Theorem pm4_22 : forall (p q r : Prop), (impl (and (bi p q) (bi q r)) (bi p r)).
+Proof.
+    intros.
+    pose (S1 := (pm3_26 (bi p q) (bi q r))).
+    pose (S2 := (syll S1 (pm3_26 (impl p q) (impl q p)))).
+    pose (S3 := (pm3_27 (bi p q) (bi q r))).
+    pose (S4 := (syll S3 (pm3_26 (impl q r) (impl r q)))).
+    pose (S5 := (mp S4 (mp S2 (pm2_83 (and (bi p q) (bi q r)) p q r)))).
+    pose (S6 := (pm3_27 (bi p q) (bi q r))).
+    pose (S7 := (syll S6 (pm3_27 (impl q r) (impl r q)))).
+    pose (S8 := (pm3_26 (bi p q) (bi q r))).
+    pose (S9 := (syll S8 (pm3_27 (impl p q) (impl q p)))).
+    pose (S10 := (mp S9 (mp S7 (pm2_83 (and (bi p q) (bi q r)) r q p)))).
+    exact (mp (andii S5 S10) (pm_comp (and (bi p q) (bi q r)) (impl p r) (impl r p))).
+Qed.
+
+Theorem bi_trans : forall {p q r s : Prop} (H0 : (impl p (bi q r))) (H1 : (impl p (bi r s))), (impl p (bi q s)).
+Proof.
+    intros.
+    exact (syll (andi H0 H1) (pm4_22 q r s)).
+Qed.
+
+Theorem bi_transi : forall {p q r : Prop} (H0 : (bi p q)) (H1 : (bi q r)), (bi p r).
+Proof.
+    intros.
+    exact (mp (andii H0 H1) (pm4_22 p q r)).
+Qed.
+
+Theorem pm4_24 : forall (p : Prop), (bi p (and p p)).
+Proof.
+    intros.
+    pose (S1 := (pm3_26 p p)).
+    pose (S2 := (pm3_2 p p)).
+    pose (S3 := (mp S2 (pm2_43 p (and p p)))).
+    exact (andii S3 S1).
+Qed.
+
+Theorem pm4_25 : forall (p : Prop), (bi p (or p p)).
+Proof.
+    intros.
+    exact (andii (pm_add p p) (pm_taut p)).
+Qed.
+
+Theorem pm4_3 : forall (p q : Prop), (bi (and p q) (and q p)).
+Proof.
+    intros.
+    exact (andii (pm3_22 p q) (pm3_22 q p)).
+Qed.
+
+Theorem pm4_31 : forall (p q : Prop), (bi (or p q) (or q p)).
+Proof.
+    intros.
+    exact (andii (pm_perm p q) (pm_perm q p)).
+Qed.
+
+Theorem pm4_32 : forall (p q r : Prop), (bi (and (and p q) r) (and p (and q r))).
+Proof.
+    intros.
+    pose (S1 := (pm4_15 p q r)).
+    pose (S2 := (bi_transi S1 (andii (pm2_03 (and q r) p) (pm2_03 p (and q r))))).
+    exact (mp S2 (andeli (pm4_11 (impl (and p q) (not r)) (impl p (not (and q r)))))).
+Qed.
+
+Theorem and_assoc : forall (p q r : Prop), (impl (and (and p q) r) (and p (and q r))).
+Proof.
+    intros.
+    exact (andeli (pm4_32 p q r)).
+Qed.
+
+Theorem and_associ : forall {p q r : Prop} (H : (and (and p q) r)), (and p (and q r)).
+Proof.
+    intros.
+    exact (mp H (and_assoc p q r)).
+Qed.
+
+Theorem and_assoc2 : forall (p q r : Prop), (impl (and p (and q r)) (and (and p q) r)).
+Proof.
+    intros.
+    exact (anderi (pm4_32 p q r)).
+Qed.
+
+Theorem and_associ2 : forall {p q r : Prop} (H : (and p (and q r))), (and (and p q) r).
+Proof.
+    intros.
+    exact (mp H (and_assoc2 p q r)).
+Qed.
+
+Theorem pm4_33 : forall (p q r : Prop), (bi (or (or p q) r) (or p (or q r))).
+Proof.
+    intros.
+    exact (andii (pm2_32 p q r) (pm2_31 p q r)).
+Qed.
+
+Theorem pm4_36 : forall (p q r : Prop), (impl (bi p q) (bi (and p r) (and q r))).
+Proof.
+    intros.
+    exact (mp (andii (pm_fact p q r) (pm_fact q p r)) (pm3_47 (impl p q) (impl q p) (impl (and p r) (and q r)) (impl (and q r) (and p r)))).
+Qed.
+
+Theorem pm4_37 : forall (p q r : Prop), (impl (bi p q) (bi (or p r) (or q r))).
+Proof.
+    intros.
+    exact (mp (andii (syll (syll (pm_sum r p q) (impl_subl (or_comm p r) (or r q))) (impl_subr (or_comm r q) (or p r))) (syll (syll (pm_sum r q p) (impl_subl (or_comm q r) (or r p))) (impl_subr (or_comm r p) (or q r)))) (pm3_47 (impl p q) (impl q p) (impl (or p r) (or q r)) (impl (or q r) (or p r)))).
+Qed.
+
+Theorem pm4_38 : forall (p q r s : Prop), (impl (and (bi p r) (bi q s)) (bi (and p q) (and r s))).
+Proof.
+    intros.
+    exact (syll (andeli (pm4_32 (impl p r) (impl r p) (and (impl q s) (impl s q)))) (syll (and_subr (anderi (pm4_32 (impl r p) (impl q s) (impl s q))) (impl p r)) (syll (and_subr (and_subl (pm3_22 (impl r p) (impl q s)) (impl s q)) (impl p r)) (syll (and_subr (andeli (pm4_32 (impl q s) (impl r p) (impl s q))) (impl p r)) (syll (anderi (pm4_32 (impl p r) (impl q s) (and (impl r p) (impl s q)))) (mp (andii (pm3_47 p q r s) (pm3_47 r s p q)) (pm3_47 (and (impl p r) (impl q s)) (and (impl r p) (impl s q)) (impl (and p q) (and r s)) (impl (and r s) (and p q))))))))).
+Qed.
+
+Theorem pm4_39 : forall (p q r s : Prop), (impl (and (bi p r) (bi q s)) (bi (or p q) (or r s))).
+Proof.
+    intros.
+    exact (syll (andeli (pm4_32 (impl p r) (impl r p) (and (impl q s) (impl s q)))) (syll (and_subr (anderi (pm4_32 (impl r p) (impl q s) (impl s q))) (impl p r)) (syll (and_subr (and_subl (pm3_22 (impl r p) (impl q s)) (impl s q)) (impl p r)) (syll (and_subr (andeli (pm4_32 (impl q s) (impl r p) (impl s q))) (impl p r)) (syll (anderi (pm4_32 (impl p r) (impl q s) (and (impl r p) (impl s q)))) (mp (andii (pm3_48 p q r s) (pm3_48 r s p q)) (pm3_47 (and (impl p r) (impl q s)) (and (impl r p) (impl s q)) (impl (or p q) (or r s)) (impl (or r s) (or p q))))))))).
+Qed.
+
+Theorem pm4_4 : forall (p q r : Prop), (bi (and p (or q r)) (or (and p q) (and p r))).
+Proof.
+    intros.
+    pose (S1 := (andii (pm3_2 p q) (pm3_2 p r))).
+    pose (S2 := (mp S1 (pm_comp p (impl q (and p q)) (impl r (and p r))))).
+    pose (S3 := (syll S2 (pm3_48 q r (and p q) (and p r)))).
+    pose (S4 := (mp S3 (pm_imp p (or q r) (or (and p q) (and p r))))).
+    pose (S5 := (andii (pm3_26 p q) (pm3_26 p r))).
+    pose (S6 := (mp S5 (pm3_44 p (and p q) (and p r)))).
+    pose (S7 := (andii (pm3_27 p q) (pm3_27 p r))).
+    pose (S8 := (mp S7 (pm3_48 (and p q) (and p r) q r))).
+    pose (S9 := (mp (andii S6 S8) (pm_comp (or (and p q) (and p r)) p (or q r)))).
+    exact (andii S4 S9).
+Qed.
+
+Theorem and_distr : forall (p q r : Prop), (impl (and p (or q r)) (or (and p q) (and p r))).
+Proof.
+    intros.
+    exact (andeli (pm4_4 p q r)).
+Qed.
+
+Theorem and_distri : forall {p q r : Prop} (H : (and p) (or q r)), (or (and p q) (and p r)).
+Proof.
+    intros.
+    exact (mp H (and_distr p q r)).
+Qed.
+
+Theorem and_fact : forall (p q r : Prop), (impl (or (and p q) (and p r)) (and p (or q r))).
+Proof.
+    intros.
+    exact (anderi (pm4_4 p q r)).
+Qed.
+
+Theorem and_facti : forall {p q r : Prop} (H : (or (and p q) (and p r))), (and p (or q r)).
+Proof.
+    intros.
+    exact (mp H (and_fact p q r)).
+Qed.
+
+Theorem pm4_41 : forall (p q r : Prop), (bi (or p (and q r)) (and (or p q) (or p r))).
+Proof.
+    intros.
+    pose (S1 := (mp (pm3_26 q r)) (pm_sum p (and q r) q)).
+    pose (S2 := (mp (pm3_27 q r)) (pm_sum p (and q r) r)).
+    pose (S3 := (mp (andii S1 S2) (pm_comp (or p (and q r)) (or p q) (or p r)))).
+    pose (S4 := (mp (andii (pm2_53 p q) (pm2_53 p r)) (pm3_47 (or p q) (or p r) (impl (not p) q) (impl (not p) r)))).
+    pose (S5 := (syll S4 (pm_comp (not p) q r))).
+    pose (S6 := (syll S5 (pm2_54 p (and q r)))).
+    exact (andii S3 S6).
+Qed.
+
+Theorem or_distr : forall (p q r : Prop), (impl (or p (and q r)) (and (or p q) (or p r))).
+Proof.
+    intros.
+    exact (andeli (pm4_41 p q r)).
+Qed.
+
+Theorem or_distri : forall {p q r : Prop} (H : (or p (and q r))), (and (or p q) (or p r)).
+Proof.
+    intros.
+    exact (mp H (or_distr p q r)).
+Qed.
+
+Theorem or_fact : forall (p q r : Prop), (impl (and (or p q) (or p r)) (or p (and q r))).
+Proof.
+    intros.
+    exact (anderi (pm4_41 p q r)).
+Qed.
+
+Theorem or_facti : forall {p q r : Prop} (H : (and (or p q) (or p r))), (or p (and q r)).
+Proof.
+    intros.
+    exact (mp H (or_fact p q r)).
 Qed.
