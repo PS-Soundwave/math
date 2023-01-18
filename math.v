@@ -1644,3 +1644,153 @@ Proof.
     intros.
     exact (mp H (or_fact p q r)).
 Qed.
+
+Theorem pm4_42 : forall (p q : Prop), (bi p (or (and p q) (and p (not q)))).
+Proof.
+Admitted.
+
+Theorem pm4_43 : forall (p q : Prop), (bi p (and (or p q) (or p (not q)))).
+Proof.
+Admitted.
+
+Theorem pm4_44 : forall (p q : Prop), (bi p (or p (and p q))).
+Proof.
+Admitted.
+
+Theorem pm4_45 : forall (p q : Prop), (bi p (and p (or p q))).
+Proof.
+Admitted.
+
+Theorem pm4_5 : forall (p q : Prop), (bi (and p q) (not (or (not p) (not q)))).
+Proof.
+Admitted.
+
+Theorem pm4_51 : forall (p q : Prop), (bi (not (and p q)) (or (not p) (not q))).
+Proof.
+Admitted.
+
+Theorem pm4_52 : forall (p q : Prop), (bi (and p (not q)) (not (or (not p) q))).
+Proof.
+Admitted.
+
+Theorem pm4_53 : forall (p q : Prop), (bi (not (and p (not q))) (or (not p) q)).
+Proof.
+Admitted.
+
+Theorem pm4_54 : forall (p q : Prop), (bi (and (not p) q) (not (or p (not q)))).
+Proof.
+Admitted.
+
+Theorem pm4_55 : forall (p q : Prop), (bi (not (and (not p) q)) (or p (not q))).
+Proof.
+Admitted.
+
+Theorem pm4_56 : forall (p q : Prop), (bi (and (not p) (not q)) (not (or p q))).
+Proof.
+Admitted.
+
+Theorem pm4_57 : forall (p q : Prop), (bi (not (and (not p) (not q))) (or p q)).
+Proof.
+Admitted.
+
+Theorem pm4_6 : forall (p q : Prop), (bi (impl p q) (or (not p) q)).
+Proof.
+Admitted.
+
+Theorem pm4_61 : forall (p q : Prop), (bi (not (impl p q)) (and p (not q))).
+Proof.
+Admitted.
+
+Theorem pm4_62 : forall (p q : Prop), (bi (impl p (not q)) (or (not p) (not q))).
+Proof.
+Admitted.
+
+Theorem pm4_63 : forall (p q : Prop), (bi (not (impl p (not q))) (and p q)).
+Proof.
+Admitted.
+
+Theorem pm4_64 : forall (p q : Prop), (bi (impl (not p) q) (or p q)).
+Proof.
+Admitted.
+
+Theorem pm4_65 : forall (p q : Prop), (bi (not (impl (not p) q)) (and (not p) (not q))).
+Proof.
+Admitted.
+
+Theorem pm4_66 : forall (p q : Prop), (bi (impl (not p) (not q)) (or p (not q))).
+Proof.
+Admitted.
+
+Theorem pm4_67 : forall (p q : Prop), (bi (not (impl (not p) (not q))) (and (not p) q)).
+Proof.
+Admitted.
+
+Theorem pm4_7 : forall (p q : Prop), (bi (impl p q) (impl p (and p q))).
+Proof.
+Admitted.
+
+Theorem pm4_71 : forall (p q : Prop), (bi (impl p q) (bi p (and p q))).
+Proof.
+Admitted.
+
+Theorem pm4_72 : forall (p q : Prop), (bi (impl p q) (bi q (or p q))).
+Proof.
+Admitted.
+
+Theorem pm4_73 : forall (p q : Prop), (impl q (bi p (and p q))).
+Proof.
+Admitted.
+
+Theorem pm4_74 : forall (p q : Prop), (impl (not p) (bi q (or p q))).
+Proof.
+Admitted.
+
+Theorem pm4_76 : forall (p q r : Prop), (bi (and (impl p q) (impl p r)) (impl p (and q r))).
+Proof.
+Admitted.
+
+Theorem pm4_77 : forall (p q r : Prop), (bi (and (impl q p) (impl q r)) (impl (or q r) p)).
+Proof.
+Admitted.
+
+Theorem pm4_78 : forall (p q r : Prop), (bi (or (impl p q) (impl p r)) (impl p (or q r))).
+Proof.
+Admitted.
+
+Theorem pm4_79 : forall (p q r : Prop), (bi (or (impl q p) (impl r p)) (impl (and q r) p)).
+Proof.
+Admitted.
+
+Theorem pm4_8 : forall (p : Prop), (bi (impl p (not p)) (not p)).
+Proof.
+Admitted.
+
+Theorem pm4_81 : forall (p : Prop), (bi (impl (not p) p) p).
+Proof.
+Admitted.
+
+Theorem pm4_82 : forall (p q : Prop), (bi (and (impl p q) (impl p (not q))) (not p)).
+Proof.
+Admitted.
+
+Theorem pm4_83 : forall (p q : Prop), (bi (and (impl p q) (impl (not p) q)) q).
+Proof.
+Admitted.
+
+Theorem pm4_84 : forall (p q r : Prop), (impl (bi p q) (bi (impl p r) (impl q r))).
+Proof.
+Admitted.
+
+Theorem pm4_85 : forall (p q r : Prop), (impl (bi p q) (bi (impl r p) (impl r q))).
+Proof.
+Admitted.
+
+Theorem pm4_86 : forall (p q r : Prop), (impl (bi p q) (bi (bi p r) (bi q r))).
+Proof.
+Admitted.
+
+Definition bi4 := fun (p q r s : Prop) => (and (and (bi p q) (bi q r)) (bi r s)).
+
+Theorem pm4_87 : forall (p q r : Prop), (bi4 (impl (and p q) r) (impl p (impl q r)) (impl q (impl p r)) (impl (and q p) r)).
+Proof.
+Admitted.
