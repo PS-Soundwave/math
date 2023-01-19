@@ -1988,12 +1988,15 @@ Proof.
 Admitted.
 
 Axiom set : forall (x : Type), Prop.
+Axiom el : forall (x y : Type), Prop.
 Axiom all : forall (P : forall (x : Type), Prop), Prop.
 Definition ex := fun (P : forall (x : Type), Prop) => (not (all (fun (x : Type) => (not (P x))))).
+Definition eq := fun (x y : Type) => (all (fun (z : Type) => (bi (el z x) (el z y)))).
 
 Axiom ax_spec : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
 Axiom ax_gen : forall (P : forall (x : Type), Prop) (H : (forall (x : Type) (Vx : (set x)), (P x))), (all P).
 Axiom ax_quant_impl : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
+Axiom ax_ex : (ex (fun (x : Type) => (eq x x))).
 
 Theorem pm10_1 : forall {x : Type} (H : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
 Proof.
@@ -2112,9 +2115,21 @@ Proof.
     exact (andi S9 S5).
 Qed.
 
-Theorem pm10_24 : forall (x : Type) (Vx : (set x)) (P : (forall (y : Type), Prop)), (impl (P x) (ex P)).
+Theorem pm10_24 : forall {x : Type} (Vx : (set x)) (P : (forall (y : Type), Prop)), (impl (P x) (ex P)).
 Proof.
     intros.
     pose (S1 := (pm10_1 Vx (fun (y : Type) => (not (P y))))).
     exact (mp S1 (pm_transp1 (all (fun (y : Type) => (not (P y)))) (P x))).
+Qed.
+
+Theorem pm10_25 : forall (P : (forall (x : Type), Prop)), (impl (all P) (ex P)).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (impl (eq x x) (impl (all P) (ex P)))).
+    intros.
+    pose (S1 := (syll (pm10_1 Vx P) (pm10_24 Vx P))).
+    exact (impliri (eq x x) S1).
+    pose (S2 := (ax_gen (fun (x : Type) => (impl (eq x x) (impl (all P) (ex P)))) S1)).
+    pose (S3 := (mp S2 (andeli (pm10_23 (impl (all P) (ex P)) (fun (x : Type) => (eq x x)))))).
+    exact (mp ax_ex S3).
 Qed.
