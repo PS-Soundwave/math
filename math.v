@@ -1991,11 +1991,11 @@ Axiom set : forall (x : Type), Prop.
 Axiom all : forall (P : forall (x : Type), Prop), Prop.
 Definition ex := fun (P : forall (x : Type), Prop) => (not (all (fun (x : Type) => (not (P x))))).
 
-Axiom ax_spec : forall {x : Type} (Vx : (set x)) (P : forall (x : Type), Prop), (impl (all P) (P x)).
+Axiom ax_spec : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
 Axiom ax_gen : forall (P : forall (x : Type), Prop) (H : (forall (x : Type) (Vx : (set x)), (P x))), (all P).
 Axiom ax_quant_impl : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
 
-Theorem pm10_1 : forall {x : Type} (H : (set x)) (P : forall (x : Type), Prop), (impl (all P) (P x)).
+Theorem pm10_1 : forall {x : Type} (H : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
 Proof.
     intros.
     exact (ax_spec H P).
@@ -2041,4 +2041,80 @@ Proof.
     pose (S3 := (syll (notdi p) (implil (not p) (Q x)))).
     exact (ore S3 S2).
     exact (ax_gen (fun (x : Type) => (impl (or p (Q x)) (impl (not p) (Q x)))) S2).
+Qed.
+
+Theorem pm10_14 : forall {x : Type} (Vx : (set x)) (P Q : forall (y : Type), Prop), (impl (and (all P) (all Q)) (and (P x) (Q x))).
+Proof.
+    intros.
+    pose (S1 := (pm10_1 Vx P)).
+    pose (S2 := (pm10_1 Vx Q)).
+    pose (S3 := (andi S1 S2)).
+    exact (mp S3 (pm3_47 (all P) (all Q) (P x) (Q x))).
+Qed.
+
+Theorem pm10_2 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (or p (Q x)))) (or p (all Q))).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (impl (or p (all Q)) (or p (Q x)))).
+    intros.
+    exact (mp (pm10_1 Vx Q) (pm_sum p (all Q) (Q x))).
+    pose (S2 := (pm10_11 (fun (x : Type) => (impl (or p (all Q)) (or p (Q x)))) S1)).
+    pose (S3 := (mp S2 (pm10_12 (not (or p (all Q))) (fun (x : Type) => (or p (Q x)))))).
+    pose (S4 := (pm10_12 p Q)).
+    exact (andi S4 S3).
+Qed.
+
+Theorem pm10_21 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
+Proof.
+    intros.
+    exact (pm10_2 (not p) Q).
+Qed.
+
+Theorem pm10_22 : forall (P Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (and (P x) (Q x)))) (and (all P) (all Q))).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (impl (all (fun (y : Type) => (and (P y) (Q y)))) (P x))).
+    intros.
+    pose (S1 := (pm10_1 Vx (fun (x : Type) => (and (P x) (Q x))))).
+    exact (syll S1 (andel (P x) (Q x))).
+    pose (S2 := (pm10_11 (fun (x : Type) => (impl (all (fun (y : Type) => (and (P y) (Q y)))) (P x))) S1)).
+    pose (S3 := (mp S2 (andeli (pm10_21 (all (fun (x : Type) => (and (P x) (Q x)))) P)))).
+    assert (S4 : forall (x : Type) (Vx : (set x)), (impl (all (fun (y : Type) => (and (P y) (Q y)))) (Q x))).
+    intros.
+    pose (S4 := (pm10_1 Vx (fun (x : Type) => (and (P x) (Q x))))).
+    exact (syll S4 (ander (P x) (Q x))).
+    pose (S5 := (pm10_11 (fun (x : Type) => (impl (all (fun (y : Type) => (and (P y) (Q y)))) (Q x))) S4)).
+    pose (S6 := (mp S5 (andeli (pm10_21 (all (fun (x : Type) => (and (P x) (Q x)))) Q)))).
+    pose (S7 := (mp (andi S3 S6) (pm_comp (all (fun (x : Type) => (and (P x) (Q x)))) (all P) (all Q)))).
+    pose (S8 := (pm10_11 (fun (x : Type) => (impl (and (all P) (all Q)) (and (P x) (Q x)))) (fun (x : Type) (Vx : (set x)) => (pm10_14 Vx P Q)))).
+    pose (S9 := (mp S8 (andeli (pm10_21 (and (all P) (all Q)) (fun (x : Type) => (and (P x) (Q x))))))).
+    exact (andi S7 S9).
+Qed.
+
+Theorem pm10_23 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (all (fun (x : Type) => (impl (Q x) p))) (impl (ex Q) p)).
+Proof.
+    intros.
+    pose (S1 := (pm_transp2 (all (fun (x : Type) => (not (Q x)))) p)).
+    pose (S2 := (syll S1 (anderi (pm10_21 (not p) (fun (x : Type) => (not (Q x))))))).
+    assert (S3 : forall (x : Type) (Vx : (set x)), (impl (impl (ex Q) p) (impl (Q x) p))).
+    intros.
+    pose (S3 := (syll S2 (pm10_1 Vx (fun (y : Type) => (impl (not p) (not (Q y))))))).
+    exact (syll S3 (pm_transp3 p (Q x))).
+    pose (S4 := (pm10_11 (fun (x : Type) => (impl (impl (ex Q) p) (impl (Q x) p))) S3)).
+    pose (S5 := (mp S4 (andeli (pm10_21 (impl (ex Q) p) (fun (x : Type) => (impl (Q x) p)))))).
+    assert (S6 : forall (x : Type) (Vx : (set x)), (impl (all (fun (y : Type) => (impl (Q y) p))) (impl (not p) (not (Q x))))).
+    intros.
+    pose (S6 := (pm10_1 Vx (fun (y : Type) => (impl (Q y) p)))).
+    exact (syll S6 (pm_transp0 (Q x) p)).
+    pose (S7 := (mp (pm10_11 (fun (x : Type) => (impl (all (fun (y : Type) => (impl (Q y) p))) (impl (not p) (not (Q x))))) S6) (andeli (pm10_21 (all (fun (x : Type) => (impl (Q x) p))) (fun (x : Type) => (impl (not p) (not (Q x)))))))).
+    pose (S8 := (syll S7 (andeli (pm10_21 (not p) (fun (x : Type) => (not (Q x))))))).
+    pose (S9 := (syll S8 (pm_transp2 p (all (fun (x : Type) => (not (Q x))))))).
+    exact (andi S9 S5).
+Qed.
+
+Theorem pm10_24 : forall (x : Type) (Vx : (set x)) (P : (forall (y : Type), Prop)), (impl (P x) (ex P)).
+Proof.
+    intros.
+    pose (S1 := (pm10_1 Vx (fun (y : Type) => (not (P y))))).
+    exact (mp S1 (pm_transp1 (all (fun (y : Type) => (not (P y)))) (P x))).
 Qed.
