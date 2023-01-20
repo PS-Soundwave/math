@@ -1998,6 +1998,9 @@ Axiom ax_gen : forall (P : forall (x : Type), Prop) (H : (forall (x : Type) (Vx 
 Axiom ax_quant_impl : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
 Axiom ax_ex : (ex (fun (x : Type) => (eq x x))).
 
+Definition gimpl := fun (P Q : (forall (x : Type), Prop)) => (all (fun (x : Type) => (impl (P x) (Q x)))).
+Definition gbi := fun (P Q : (forall (x : Type), Prop)) => (all (fun (x : Type) => (bi (P x) (Q x)))).
+
 Theorem pm10_1 : forall {x : Type} (H : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
 Proof.
     intros.
@@ -2133,3 +2136,155 @@ Proof.
     pose (S3 := (mp S2 (andeli (pm10_23 (impl (all P) (ex P)) (fun (x : Type) => (eq x x)))))).
     exact (mp ax_ex S3).
 Qed.
+
+Theorem pm10_251 : forall (P : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (not (P x)))) (not (all P))).
+Proof.
+Admitted.
+
+Theorem pm10_252 : forall (P : (forall (x : Type), Prop)), (bi (not (ex P)) (all (fun (x : Type) => (not (P x))))).
+Proof.
+Admitted.
+
+Theorem pm10_253 : forall (P : (forall (x : Type), Prop)), (bi (not (all P)) (ex (fun (x : Type) => (not (P x))))).
+Proof.
+Admitted.
+
+Theorem pm10_26 : forall (x : Type) (Vx : (set x)) (P Q : (forall (y : Type), Prop)), (impl (and (all (fun (y : Type) => (impl (P y) (Q y)))) (P x)) (Q x)).
+Proof.
+Admitted.
+
+Theorem pm10_27 : forall (P Q : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (all P) (all Q))).
+Proof.
+Admitted.
+
+Theorem pm10_28 : forall (P Q : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (ex P) (ex Q))).
+Proof.
+Admitted.
+
+Theorem pm10_281 : forall (P Q : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (bi (ex P) (ex Q))).
+Proof.
+Admitted.
+
+Theorem pm10_29 : forall (P Q R : (forall (x : Type), Prop)), (bi (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (P x) (R x))))) (all (fun (x : Type) => (impl (P x) (and (Q x) (R x)))))).
+Proof.
+Admitted.
+
+Theorem pm10_3 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (Q x) (R x))))) (all (fun (x : Type) => (impl (P x) (R x))))).
+Proof.
+Admitted.
+
+Theorem pm10_301 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (all (fun (x : Type) => (bi (P x) (Q x)))) (all (fun (x : Type) => (bi (Q x) (R x))))) (all (fun (x : Type) => (bi (P x) (R x))))).
+Proof.
+Admitted.
+
+Theorem pm10_31 : forall (P Q R : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (and (P x) (R x)) (and (Q x) (R x)))))).
+Proof.
+Admitted.
+
+Theorem pm10_311 : forall (P Q R : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (all (fun (x : Type) => (bi (and (P x) (R x)) (and (Q x) (R x)))))).
+Proof.
+Admitted.
+
+Theorem pm10_32 : forall (P Q : (forall (x : Type), Prop)), (bi (gimpl P Q) (gimpl Q P)).
+Proof.
+Admitted.
+
+Theorem pm10_321 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (gbi P Q) (gbi P R)) (gbi Q R)).
+Proof.
+Admitted.
+
+Theorem pm10_322 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (gbi Q P) (gbi R P)) (gbi Q R)).
+Proof.
+Admitted.
+
+Theorem pm10_33 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (all (fun (x : Type) => (and (Q x) p))) (and (all Q) p)).
+Proof.
+Admitted.
+
+Theorem pm10_34 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (impl (Q x) p))) (impl (all Q) p)).
+Proof.
+Admitted.
+
+Theorem pm10_35 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (and p (Q x)))) (and p (ex Q))).
+Proof.
+Admitted.
+
+Theorem pm10_36 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (or (Q x) p))) (or (ex Q) p)).
+Proof.
+Admitted.
+
+Theorem pm10_37 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (impl p (Q x)))) (impl p (ex Q))).
+Proof.
+Admitted.
+
+Theorem pm10_39 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gimpl P R) (gimpl Q S)) (gimpl (fun (x : Type) => (and (P x) (Q x))) (fun (x : Type) => (and (R x) (S x))))).
+Proof.
+Admitted.
+
+Theorem pm10_4 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (and (P x) (Q x))) (fun (x : Type) => (and (R x) (S x))))).
+Proof.
+Admitted.
+
+Theorem pm10_41 : forall (P Q : (forall (x : Type), Prop)), (impl (or (all P) (all Q)) (all (fun (x : Type) => (or (P x) (Q x))))).
+Proof.
+Admitted.
+
+Theorem pm10_411 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (or (P x) (Q x))) (fun (x : Type) => (or (R x) (S x))))).
+Proof.
+Admitted.
+
+Theorem pm10_412 : forall (P Q : (forall (x : Type), Prop)), (bi (gbi P Q) (gbi (fun (x : Type) => (not (P x))) (fun (x : Type) => (not (Q x))))).
+Proof.
+Admitted.
+
+Theorem pm10_413 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (impl (P x) (Q x))) (fun (x : Type) => (impl (R x) (S x))))).
+Proof.
+Admitted.
+
+Theorem pm10_414 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (bi (P x) (Q x))) (fun (x : Type) => (bi (R x) (S x))))).
+Proof.
+Admitted.
+
+Theorem pm10_42 : forall (P Q : (forall (x : Type), Prop)), (bi (or (ex P) (ex Q)) (ex (fun (x : Type) => (or (P x) (Q x))))).
+Proof.
+Admitted.
+
+Theorem pm10_43 : forall {x : Type} (Vx : (set x)) (P Q : (forall (x : Type), Prop)), (bi (and (gbi P Q) (P x)) (and (gbi P Q) (Q x))).
+Proof.
+Admitted.
+
+Theorem pm10_5 : forall (P Q : (forall (x : Type), Prop)), (impl (ex (fun (x : Type) => (and (P x) (Q x)))) (and (ex P) (ex Q))).
+Proof.
+Admitted.
+
+Theorem pm10_51 : forall (P Q : (forall (x : Type), Prop)), (bi (not (ex (fun (x : Type) => (and (P x) (Q x))))) (gimpl P (fun (x : Type) => (not (Q x))))).
+Proof.
+Admitted.
+
+Theorem pm10_52 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (impl (ex Q) (bi (all (fun (x : Type) => (impl (Q x) p))) p)).
+Proof.
+Admitted.
+
+Theorem pm10_53 : forall (P Q : (forall (x : Type), Prop)), (impl (not (ex P)) (gimpl P Q)).
+Proof.
+Admitted.
+
+Theorem pm10_541 : forall (p : Prop) (Q R : (forall (x : Type), Prop)), (bi (gimpl Q (fun (x : Type) => (or p (R x)))) (or p (gimpl Q R))).
+Proof.
+Admitted.
+
+Theorem pm10_542 : forall (p : Prop) (Q R : (forall (x : Type), Prop)), (bi (gimpl Q (fun (x : Type) => (impl p (R x)))) (impl p (gimpl Q R))).
+Proof.
+Admitted.
+
+Theorem pm10_55 : forall (P Q : (forall (x : Type), Prop)), (bi (and (ex (fun (x : Type) => (and (P x) (Q x)))) (gimpl P Q)) (and (ex P) (gimpl P Q))).
+Proof.
+Admitted.
+
+Theorem pm10_56 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (gimpl P Q) (ex (fun (x : Type) => (and (P x) (R x))))) (ex (fun (x : Type) => (and (Q x) (R x))))).
+Proof.
+Admitted.
+
+Theorem pm10_57 : forall (P Q R : (forall (x : Type), Prop)), (impl (gimpl P (fun (x : Type) => (or (Q x) (R x)))) (or (gimpl P Q) (ex (fun (x : Type) => (and (P x) (R x)))))).
+Proof.
+Admitted.
