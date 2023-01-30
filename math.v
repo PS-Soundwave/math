@@ -405,16 +405,16 @@ Proof.
     exact (pm1_6 p q r).
 Qed.
 
-Theorem or_subr : forall {p q : Prop} (H0 : (impl p q)) (r : Prop), (impl (or r p) (or r q)).
+Theorem or_subr : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl (or r p) (or r q)).
 Proof.
     intros.
-    exact (mp H0 (pm_sum r p q)).
+    exact (mp H (pm1_6 r p q)).
 Qed.
 
-Theorem or_subri : forall {p q r : Prop} (H0 : (or r p)) (H1 : (impl p q)), (or r q).
+Theorem or_subri : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (or r p)), (or r q).
 Proof.
     intros.
-    exact (mp H0 (or_subr H1 r)).
+    exact (mp H1 (or_subr H0 r)).
 Qed.
 
 Theorem pm2_01 : forall (p : Prop), (impl (impl p (not p)) (not p)).
@@ -503,6 +503,32 @@ Proof.
     exact (pm2_06 p q r).
 Qed.
 
+Theorem syll : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (impl q r)), (impl p r).
+Proof.
+    intros.
+    pose (S1 := (pm2_06 p q r)).
+    pose (S2 := (mp H0 S1)).
+    exact (mp H1 S2).
+Qed.
+
+Theorem orird : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl p (or r q)).
+Proof.
+    intros.
+    exact (syll H (orir r q)).
+Qed.
+
+Theorem or_commd : forall {p q r : Prop} (H : (impl p (or q r))), (impl p (or r q)).
+Proof.
+    intros.
+    exact (syll H (or_comm q r)).
+Qed.
+
+Theorem implird : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl p (impl r q)).
+Proof.
+    intros.
+    exact (syll H (implir r q)).
+Qed.
+
 Theorem impl_subl : forall {p q : Prop} (H : (impl q p)) (r : Prop), (impl (impl p r) (impl q r)).
 Proof.
     intros.
@@ -513,14 +539,6 @@ Theorem impl_subli : forall {p q r : Prop} (H0 : (impl q p)) (H1 : (impl p r)), 
 Proof.
     intros.
     exact (mp H1 (impl_subl H0 r)).
-Qed.
-
-Theorem syll : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (impl q r)), (impl p r).
-Proof.
-    intros.
-    pose (S1 := (pm2_06 p q r)).
-    pose (S2 := (mp H0 S1)).
-    exact (mp H1 S2).
 Qed.
 
 Theorem pm2_07 : forall (p : Prop), (impl p (or p p)).
@@ -582,6 +600,12 @@ Proof.
     exact (pm2_12 p).
 Qed.
 
+Theorem notdid : forall {p q : Prop} (H : (impl p q)), (impl p (not (not q))).
+Proof.
+    intros.
+    exact (syll H (notdi q)).
+Qed.
+
 Theorem notdii : forall {p : Prop} (H : p), (not (not p)).
 Proof.
     intros.
@@ -608,6 +632,12 @@ Theorem notde : forall (p : Prop), (impl (not (not p)) p).
 Proof.
     intros.
     exact (pm2_14 p).
+Qed.
+
+Theorem notded : forall {p q : Prop} (H : (impl p (not (not q)))), (impl p q).
+Proof.
+    intros.
+    exact (syll H (notde q)).
 Qed.
 
 Theorem notdei : forall {p : Prop} (H : (not (not p))), p.
@@ -648,22 +678,22 @@ Proof.
     exact (syll S2 S3).
 Qed.
 
-Theorem not_sub : forall {p q : Prop} (H : (impl q p)), (impl (not p) (not q)).
-Proof.
-    intros.
-    exact (mp H (pm2_16 q p)).
-Qed.
-
-Theorem not_subi : forall {p q : Prop} (H0 : (not p)) (H1 : (impl q p)), (not q).
-Proof.
-    intros.
-    exact (mp H0 (not_sub H1)).
-Qed.
-
 Theorem pm_transp0 : forall (p q : Prop), (impl (impl p q) (impl (not q) (not p))).
 Proof.
     intros.
     exact (pm2_16 p q).
+Qed.
+
+Theorem not_sub : forall {p q : Prop} (H : (impl q p)), (impl (not p) (not q)).
+Proof.
+    intros.
+    exact (mp H (pm_transp0 q p)).
+Qed.
+
+Theorem not_subi : forall {p q : Prop} (H0 : (impl q p)) (H1 : (not p)), (not q).
+Proof.
+    intros.
+    exact (mp H1 (mp H0 (pm_transp0 q p))).
 Qed.
 
 Theorem pm2_17 : forall (p q : Prop), (impl (impl (not q) (not p)) (impl p q)).
@@ -706,6 +736,12 @@ Proof.
     exact (pm2_2 p q).
 Qed.
 
+Theorem orild : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl p (or q r)).
+Proof.
+    intros.
+    exact (syll H (oril q r)).
+Qed.
+
 Theorem orili : forall {p : Prop} (H : p) (q : Prop), (or p q).
 Proof.
     intros.
@@ -722,6 +758,12 @@ Theorem implil : forall (p q : Prop), (impl (not p) (impl p q)).
 Proof.
     intros.
     exact (pm2_21 p q).
+Qed.
+
+Theorem implild : forall {p q : Prop} (H : impl p (not q)) (r : Prop), (impl p (impl q r)).
+Proof.
+    intros.
+    exact (syll H (implil q r)).
 Qed.
 
 Theorem implili : forall {p : Prop} (H : (not p)) (q : Prop), (impl p q).
@@ -776,6 +818,12 @@ Proof.
     exact (pm2_31 p q r).
 Qed.
 
+Theorem or_assocd2 : forall {p q r s : Prop} (H : (impl p (or q (or r s)))), (impl p (or (or q r) s)).
+Proof.
+    intros.
+    exact (syll H (or_assoc2 q r s)).
+Qed.
+
 Theorem or_associ2 : forall {p q r : Prop} (H : (or p (or q r))), (or (or p q) r).
 Proof.
     intros.
@@ -794,6 +842,12 @@ Theorem or_assoc : forall (p q r : Prop), (impl (or (or p q) r) (or p (or q r)))
 Proof.
     intros.
     exact (pm2_32 p q r).
+Qed.
+
+Theorem or_assocd : forall {p q r s : Prop} (H : (impl p (or (or q r) s))), (impl p (or q (or r s))).
+Proof.
+    intros.
+    exact (syll H (or_assoc q r s)).
 Qed.
 
 Theorem or_associ : forall {p q r : Prop} (H : (or (or p q) r)), (or p (or q r)).
@@ -837,10 +891,10 @@ Proof.
     exact (mp H (pm2_38 r p q)).
 Qed.
 
-Theorem or_subli : forall {p q r : Prop} (H0 : (or q p)) (H1 : (impl q r)), (or r p).
+Theorem or_subli : forall {p q r : Prop} (H0 : (impl q r)) (H1 : (or q p)), (or r p).
 Proof.
     intros.
-    exact (mp H0 (or_subl H1 p)).
+    exact (mp H1 (or_subl H0 p)).
 Qed.
 
 Theorem pm2_4 : forall (p q : Prop), (impl (or p (or p q)) (or p q)).
@@ -1042,12 +1096,6 @@ Proof.
     exact (pm2_76 (not p) q r).
 Qed.
 
-Theorem mpc : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (impl p (impl q r))), (impl p r).
-Proof.
-    intros.
-    exact (mp H0 (mp H1 (pm2_77 p q r))).
-Qed.
-
 Theorem pm2_8 : forall (q r s : Prop), (impl (or q r) (impl (or (not r) s) (or q s))).
 Proof.
     intros.
@@ -1075,7 +1123,7 @@ Proof.
     exact (syll (syll (or_assoc2 (not p) (not q) r) (pm2_82 (not p) (not q) r s)) (syll (impl_subl (or_assoc2 (not p) (not r) s) (or3 (not p) (not q) s)) (impl_subr (or_assoc (not p) (not q) s) (impl p (impl r s))))).
 Qed.
 
-Theorem syllc : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (impl r s))), (impl p (impl q s)).
+Theorem sylld : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (impl r s))), (impl p (impl q s)).
 Proof.
     intros.
     exact (mp H1 (mp H0 (pm2_83 p q r s))).
@@ -1171,6 +1219,12 @@ Proof.
     exact (pm3_22 p q).
 Qed.
 
+Theorem and_commd : forall {p q r : Prop} (H : (impl p (and q r))), (impl p (and r q)).
+Proof.
+    intros.
+    exact (syll H (and_comm q r)).
+Qed.
+
 Theorem and_commi : forall {p q : Prop} (H : (and p q)), (and q p).
 Proof.
     intros.
@@ -1198,6 +1252,12 @@ Proof.
     exact (pm3_26 p q).
 Qed.
 
+Theorem andeld : forall {p q r : Prop} (H : (impl p (and q r))), (impl p q).
+Proof.
+    intros.
+    exact (syll H (andel q r)).
+Qed.
+
 Theorem andeli : forall {p q : Prop} (H : (and p q)), p.
 Proof.
     intros.
@@ -1215,6 +1275,12 @@ Theorem ander : forall (p q : Prop), (impl (and p q) q).
 Proof.
     intros.
     exact (pm3_27 p q).
+Qed.
+
+Theorem anderd : forall {p q r : Prop} (H : (impl p (and q r))), (impl p r).
+Proof.
+    intros.
+    exact (syll H (ander q r)).
 Qed.
 
 Theorem anderi : forall {p q : Prop} (H : (and p q)), q.
@@ -1252,6 +1318,36 @@ Proof.
     exact (pm3_31 p q r).
 Qed.
 
+Theorem or_subrc : forall (p q r : Prop), (impl (and (impl p q) (or r p)) (or r q)).
+Proof.
+    intros.
+    exact (mp (pm_sum r p q) (pm_imp (impl p q) (or r p) (or r q))).
+Qed.
+
+Theorem impl_subrc : forall (p q r : Prop), (impl (and (impl p q) (impl r p)) (impl r q)).
+Proof.
+    intros.
+    exact (mp (pm_syll2 r p q) (pm_imp (impl p q) (impl r p) (impl r q))).
+Qed.
+
+Theorem impl_sublc : forall (p q r : Prop), (impl (and (impl q p) (impl p r)) (impl q r)).
+Proof.
+    intros.
+    exact (mp (pm_syll q p r) (pm_imp (impl q p) (impl p r) (impl q r))).
+Qed.
+
+Theorem not_subc : forall (p q : Prop), (impl (and (impl q p) (not p)) (not q)).
+Proof.
+    intros.
+    exact (mp (pm2_16 q p) (pm_imp (impl q p) (not p) (not q))).
+Qed.
+
+Theorem or_sublc : forall (p q r : Prop), (impl (and (impl p q) (or p r)) (or q r)).
+Proof.
+    intros.
+    exact (mp (pm2_38 r p q) (pm_imp (impl p q) (or p r) (or q r))).
+Qed.
+
 Theorem pm3_33 : forall (p q r : Prop), (impl (and (impl p q) (impl q r)) (impl p r)).
 Proof.
     intros.
@@ -1259,6 +1355,12 @@ Proof.
 Qed.
 
 Theorem pm_asyll : forall (p q r : Prop), (impl (and (impl p q) (impl q r)) (impl p r)).
+Proof.
+    intros.
+    exact (pm3_33 p q r).
+Qed.
+
+Theorem syllc : forall (p q r : Prop), (impl (and (impl p q) (impl q r)) (impl p r)).
 Proof.
     intros.
     exact (pm3_33 p q r).
@@ -1280,6 +1382,12 @@ Theorem pm3_35 : forall (p q : Prop), (impl (and p (impl p q)) q).
 Proof.
     intros.
     exact (mp (pm2_27 p q) (pm_imp p (impl p q) q)).
+Qed.
+
+Theorem mpc : forall (p q : Prop), (impl (and p (impl p q)) q).
+Proof.
+    intros.
+    exact (pm3_35 p q).
 Qed.
 
 Theorem pm3_37 : forall (p q r : Prop), (impl (impl (and p q) r) (impl (and p (not r)) (not q))).
@@ -1331,6 +1439,42 @@ Proof.
     exact (mp (andi H0 H1) (pm3_43 p q r)).
 Qed.
 
+Theorem mpd : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (impl p (impl q r))), (impl p r).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (mpc q r)).
+Qed.
+
+Theorem or_subrd : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (or s q))), (impl p (or s r)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (or_subrc q r s)).
+Qed.
+
+Theorem impl_subrd : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (impl s q))), (impl p (impl s r)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (impl_subrc q r s)).
+Qed.
+
+Theorem impl_subld : forall {p q r s : Prop} (H0 : (impl p (impl r q))) (H1 : (impl p (impl q s))), (impl p (impl r s)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (impl_sublc q r s)).
+Qed.
+
+Theorem not_subd : forall {p q r : Prop} (H0 : (impl p (impl r q))) (H1 : (impl p (not q))), (impl p (not r)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (not_subc q r)).
+Qed.
+
+Theorem or_subld : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (or q s))), (impl p (or r s)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (or_sublc q r s)).
+Qed.
+
 Theorem pm3_44 : forall (p q r : Prop), (impl (and (impl q p) (impl r p)) (impl (or q r) p)).
 Proof.
     intros.
@@ -1347,7 +1491,17 @@ Proof.
     intros.
     pose (S1 := (andd H1 H2)).
     pose (S2 := (syll S1 (pm3_44 s q r))).
-    exact (mpc H0 S2).
+    exact (mpd H0 S2).
+Qed.
+
+Theorem orec : forall (p q r : Prop), (impl (and (or p q) (and (impl p r) (impl q r))) r).
+Proof.
+    intros.
+    pose (S1 := (id (and (or p q) (and (impl p r) (impl q r))))).
+    pose (S2 := (andeld S1)).
+    pose (S3 := (andeld (anderd S1))).
+    pose (S4 := (anderd (anderd S1))).
+    exact (ored S2 S3 S4).
 Qed.
 
 Theorem ore : forall {p q r : Prop} (H0 : (impl p r)) (H1 : (impl q r)), (impl (or p q) r).
@@ -1375,28 +1529,52 @@ Proof.
     exact (pm3_45 p q r).
 Qed.
 
+Theorem and_sublc : forall (p q r : Prop), (impl (and (impl p q) (and p r)) (and q r)).
+Proof.
+    intros.
+    exact (mp (pm_fact p q r) (pm_imp (impl p q) (and p r) (and q r))).
+Qed.
+
+Theorem and_subld : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (and q s))), (impl p (and r s)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (and_sublc q r s)).
+Qed.
+
 Theorem and_subl : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl (and p r) (and q r)).
 Proof.
     intros.
     exact (mp H (pm_fact p q r)).
 Qed.
 
-Theorem and_subli : forall {p q r : Prop} (H0 : (and p r)) (H1 : (impl p q)), (and q r).
+Theorem and_subli : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (and p r)), (and q r).
 Proof.
     intros.
-    exact (mp H0 (and_subl H1 r)).
+    exact (mp H1 (and_subl H0 r)).
+Qed.
+
+Theorem and_subrc : forall (p q r : Prop), (impl (and (impl p q) (and r p)) (and r q)).
+Proof.
+    intros.
+    exact (syll (syll (syll (syll (and_comm (impl p q) (and r p)) (and_subl (and_comm r p) (impl p q))) (and_comm (and p r) (impl p q))) (and_sublc p q r)) (and_comm q r)).
+Qed.
+
+Theorem and_subrd : forall {p q r s : Prop} (H0 : (impl p (impl q r))) (H1 : (impl p (and s q))), (impl p (and s r)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (and_subrc q r s)).
 Qed.
 
 Theorem and_subr : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl (and r p) (and r q)).
 Proof.
     intros.
-    exact (syll (and_comm r p) (syll (and_subl H r) (and_comm q r))).
+    exact (mp H (mp (and_subrc p q r) (pm_exp (impl p q) (and r p) (and r q)))).
 Qed.
 
-Theorem and_subri : forall {p q r : Prop} (H0 : (and r p)) (H1 : (impl p q)), (and r q).
+Theorem and_subri : forall {p q r : Prop} (H0 : (impl p q)) (H1 : (and r p)), (and r q).
 Proof.
     intros.
-    exact (mp H0 (and_subr H1 r)).
+    exact (mp H1 (and_subr H0 r)).
 Qed.
 
 Theorem pm3_47 : forall (p q r s : Prop), (impl (and (impl p r) (impl q s)) (impl (and p q) (and r s))).
@@ -1485,6 +1663,12 @@ Proof.
     exact (andeli (pm4_21 p q)).
 Qed.
 
+Theorem bi_commd : forall {p q r : Prop} (H : (impl p (bi q r))), (impl p (bi r q)).
+Proof.
+    intros.
+    exact (syll H (bi_comm q r)).
+Qed.
+
 Theorem bi_commi : forall {p q : Prop} (H : (bi p q)), (bi q p).
 Proof.
     intros.
@@ -1507,7 +1691,13 @@ Proof.
     exact (mp (andi S5 S10) (pm_comp (and (bi p q) (bi q r)) (impl p r) (impl r p))).
 Qed.
 
-Theorem bi_trans : forall {p q r s : Prop} (H0 : (impl p (bi q r))) (H1 : (impl p (bi r s))), (impl p (bi q s)).
+Theorem bi_trans : forall (p q r : Prop), (impl (and (bi p q) (bi q r)) (bi p r)).
+Proof.
+    intros.
+    exact (pm4_22 p q r).
+Qed.
+
+Theorem bi_transd : forall {p q r s : Prop} (H0 : (impl p (bi q r))) (H1 : (impl p (bi r s))), (impl p (bi q s)).
 Proof.
     intros.
     exact (syll (andd H0 H1) (pm4_22 q r s)).
@@ -1560,6 +1750,12 @@ Proof.
     exact (andeli (pm4_32 p q r)).
 Qed.
 
+Theorem and_assocd : forall {p q r s : Prop} (H : (impl p (and (and q r) s))), (impl p (and q (and r s))).
+Proof.
+    intros.
+    exact (syll H (and_assoc q r s)).
+Qed.
+
 Theorem and_associ : forall {p q r : Prop} (H : (and (and p q) r)), (and p (and q r)).
 Proof.
     intros.
@@ -1570,6 +1766,12 @@ Theorem and_assoc2 : forall (p q r : Prop), (impl (and p (and q r)) (and (and p 
 Proof.
     intros.
     exact (anderi (pm4_32 p q r)).
+Qed.
+
+Theorem and_assocd2 : forall {p q r s : Prop} (H : (impl p (and q (and r s)))), (impl p (and (and q r) s)).
+Proof.
+    intros.
+    exact (syll H (and_assoc2 q r s)).
 Qed.
 
 Theorem and_associ2 : forall {p q r : Prop} (H : (and p (and q r))), (and (and p q) r).
@@ -1631,6 +1833,12 @@ Proof.
     exact (andeli (pm4_4 p q r)).
 Qed.
 
+Theorem and_distrd : forall {p q r s : Prop} (H : (impl p (and q (or r s)))), (impl p (or (and q r) (and q s))).
+Proof.
+    intros.
+    exact (syll H (and_distr q r s)).
+Qed.
+
 Theorem and_distri : forall {p q r : Prop} (H : (and p) (or q r)), (or (and p q) (and p r)).
 Proof.
     intros.
@@ -1641,6 +1849,12 @@ Theorem and_fact : forall (p q r : Prop), (impl (or (and p q) (and p r)) (and p 
 Proof.
     intros.
     exact (anderi (pm4_4 p q r)).
+Qed.
+
+Theorem and_factd : forall {p q r s : Prop} (H : (impl p (or (and q r) (and q s)))), (impl p (and q (or r s))).
+Proof.
+    intros.
+    exact (syll H (and_fact q r s)).
 Qed.
 
 Theorem and_facti : forall {p q r : Prop} (H : (or (and p q) (and p r))), (and p (or q r)).
@@ -1667,6 +1881,12 @@ Proof.
     exact (andeli (pm4_41 p q r)).
 Qed.
 
+Theorem or_distrd : forall {p q r s : Prop} (H : (impl p (or q (and r s)))), (impl p (and (or q r) (or q s))).
+Proof.
+    intros.
+    exact (syll H (or_distr q r s)).
+Qed.
+
 Theorem or_distri : forall {p q r : Prop} (H : (or p (and q r))), (and (or p q) (or p r)).
 Proof.
     intros.
@@ -1677,6 +1897,12 @@ Theorem or_fact : forall (p q r : Prop), (impl (and (or p q) (or p r)) (or p (an
 Proof.
     intros.
     exact (anderi (pm4_41 p q r)).
+Qed.
+
+Theorem or_factd : forall {p q r s : Prop} (H : (impl p (and (or q r) (or q s)))), (impl p (or q (and r s))).
+Proof.
+    intros.
+    exact (syll H (or_fact q r s)).
 Qed.
 
 Theorem or_facti : forall {p q r : Prop} (H : (and (or p q) (or p r))), (or p (and q r)).
