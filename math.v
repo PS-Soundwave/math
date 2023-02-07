@@ -226,34 +226,32 @@ Qed.
 Theorem nicod_assoc : forall (p q r : Prop), (stroke (stroke p (stroke (stroke q r) (stroke q r))) (stroke (stroke q (stroke (stroke p r) (stroke p r))) (stroke q (stroke (stroke p r) (stroke p r))))).
 Proof.
     assert (L : forall (p q : Prop), (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))).
-    {
-        intros.
-        pose (L1 := (scharle21 p q q p)).
-        pose (S1 := (scharle24 q p)).
-        pose (S2 := (scharle21 q (stroke p (stroke q q)) (stroke p (stroke q q)) (stroke (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q p) (stroke (stroke p p) (stroke p p)))))).
-        pose (S3 := (ax_mp S1 S2)).
-        pose (L2 := (ax_mp L1 S3)).
-        pose (L3 := (scharle21 (stroke q p) (stroke p p) (stroke p p) p)).
-        pose (S4 := (scharle24 (stroke (stroke p p) p) q)).
-        pose (L4 := (ax_mp (scharle8 p) S4)).
-        pose (S5 := (scharle21 q (stroke (stroke p p) p) (stroke (stroke p p) p) (stroke (stroke (stroke q p ) p) (stroke (stroke q p ) p)))).
-        pose (S6 := (ax_mp L4 S5)).
-        pose (S7 := (scharle21 (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke (stroke p p) p) (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke (stroke (stroke p p) p) (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
-        pose (S8 := (ax_mp L3 S7)).
-        pose (S9 := (ax_mp S6 S8)).
-        pose (S10 := (scharle21 q (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
-        pose (S11 := (ax_mp L2 S10)).
-        pose (LA := (ax_mp S9 S11)).
-        pose (S12 := (scharle12 q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))).
-        pose (S13 := (scharle21 (stroke q q) (stroke (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) (stroke (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
-        pose (S14 := (ax_mp S12 S13)).
-        pose (S15 := (ax_mp (scharle7 (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) S14)).
-        pose (LB := (ax_mp S15 (scharle7 (stroke q q) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))))))).
-        pose (S16 := (scharle21 (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))) q q (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
-        pose (S17 := (ax_mp LB S16)).
-        pose (S18 := (ax_mp LA S17)).
-        exact (ax_mp S18 (scharle8 (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
-    }
+    intros.
+    pose (L1 := (scharle21 p q q p)).
+    pose (S1 := (scharle24 q p)).
+    pose (S2 := (scharle21 q (stroke p (stroke q q)) (stroke p (stroke q q)) (stroke (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q p) (stroke (stroke p p) (stroke p p)))))).
+    pose (S3 := (ax_mp S1 S2)).
+    pose (L2 := (ax_mp L1 S3)).
+    pose (L3 := (scharle21 (stroke q p) (stroke p p) (stroke p p) p)).
+    pose (S4 := (scharle24 (stroke (stroke p p) p) q)).
+    pose (L4 := (ax_mp (scharle8 p) S4)).
+    pose (S5 := (scharle21 q (stroke (stroke p p) p) (stroke (stroke p p) p) (stroke (stroke (stroke q p ) p) (stroke (stroke q p ) p)))).
+    pose (S6 := (ax_mp L4 S5)).
+    pose (S7 := (scharle21 (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke (stroke p p) p) (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke (stroke (stroke p p) p) (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+    pose (S8 := (ax_mp L3 S7)).
+    pose (S9 := (ax_mp S6 S8)).
+    pose (S10 := (scharle21 q (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q p) (stroke (stroke p p) (stroke p p))) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+    pose (S11 := (ax_mp L2 S10)).
+    pose (LA := (ax_mp S9 S11)).
+    pose (S12 := (scharle12 q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))).
+    pose (S13 := (scharle21 (stroke q q) (stroke (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) (stroke (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+    pose (S14 := (ax_mp S12 S13)).
+    pose (S15 := (ax_mp (scharle7 (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)) q) S14)).
+    pose (LB := (ax_mp S15 (scharle7 (stroke q q) (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))))))).
+    pose (S16 := (scharle21 (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))) q q (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
+    pose (S17 := (ax_mp LB S16)).
+    pose (S18 := (ax_mp LA S17)).
+    exact (ax_mp S18 (scharle8 (stroke (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p))) (stroke q (stroke (stroke (stroke q p) p) (stroke (stroke q p) p)))))).
     intros.
     pose (S1 := (scharle21 q (stroke (stroke q r) r) (stroke (stroke q r) r) (stroke (stroke p r) (stroke p r)))).
     pose (S2 := (ax_mp (L r q) S1)).
@@ -1602,6 +1600,7 @@ Proof.
 Qed.
 
 Definition bi := fun (p q : Prop) => (and (impl p q) (impl q p)).
+Definition bi3 := fun (p q r : Prop) => (and (bi p q) (bi q r)).
 
 Theorem pm4_1 : forall (p q : Prop), (bi (impl p q) (impl (not q) (not p))).
 Proof.
@@ -2220,12 +2219,12 @@ Definition ex := fun (P : forall (x : Type), Prop) => (not (all (fun (x : Type) 
 Definition eq := fun (x y : Type) => (all (fun (z : Type) => (bi (el z x) (el z y)))).
 
 Axiom ax_spec : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
-Axiom ax_gen : forall (P : forall (x : Type), Prop) (H : (forall (x : Type) (Vx : (set x)), (P x))), (all P).
+Axiom ax_gen : forall (P : forall (x : Type), Prop) (H : forall (x : Type) (Vx : (set x)), (P x)), (all P).
 Axiom ax_quant_impl : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
 Axiom ax_ex : (ex (fun (x : Type) => (eq x x))).
 
-Definition gimpl := fun (P Q : (forall (x : Type), Prop)) => (all (fun (x : Type) => (impl (P x) (Q x)))).
-Definition gbi := fun (P Q : (forall (x : Type), Prop)) => (all (fun (x : Type) => (bi (P x) (Q x)))).
+Definition gimpl := fun (P Q : forall (x : Type), Prop) => (all (fun (x : Type) => (impl (P x) (Q x)))).
+Definition gbi := fun (P Q : forall (x : Type), Prop) => (all (fun (x : Type) => (bi (P x) (Q x)))).
 
 Theorem pm10_1 : forall {x : Type} (H : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
 Proof.
@@ -2250,7 +2249,7 @@ Proof.
     pose (S4 := (id (impl (not p) (all Q)))).
     pose (S5 := (impliri (impl (not p) (all Q)) (ex_mid p))).
     pose (S6 := (impliri (impl (not p) (all Q)) (oril p (all Q)))).
-    pose (S7 := (syllc S4 (impliri (impl (not p) (all Q)) (orir p (all Q))))).
+    pose (S7 := (sylld S4 (impliri (impl (not p) (all Q)) (orir p (all Q))))).
     exact (ored S5 S6 S7).
     enough (S2 : (all (fun (x : Type) => (impl (or p (Q x)) (impl (not p) (Q x)))))).
     enough (S3 : (impl (all (fun (x : Type) => (impl (or p (Q x)) (impl (not p) (Q x))))) (impl (all (fun (x : Type) => (or p (Q x)))) (all (fun (x : Type) => (impl (not p) (Q x))))))).
@@ -2323,7 +2322,7 @@ Proof.
     exact (andi S7 S9).
 Qed.
 
-Theorem pm10_23 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (all (fun (x : Type) => (impl (Q x) p))) (impl (ex Q) p)).
+Theorem pm10_23 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (impl (Q x) p))) (impl (ex Q) p)).
 Proof.
     intros.
     pose (S1 := (pm_transp2 (all (fun (x : Type) => (not (Q x)))) p)).
@@ -2344,14 +2343,14 @@ Proof.
     exact (andi S9 S5).
 Qed.
 
-Theorem pm10_24 : forall {x : Type} (Vx : (set x)) (P : (forall (y : Type), Prop)), (impl (P x) (ex P)).
+Theorem pm10_24 : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (P x) (ex P)).
 Proof.
     intros.
     pose (S1 := (pm10_1 Vx (fun (y : Type) => (not (P y))))).
     exact (mp S1 (pm_transp1 (all (fun (y : Type) => (not (P y)))) (P x))).
 Qed.
 
-Theorem pm10_25 : forall (P : (forall (x : Type), Prop)), (impl (all P) (ex P)).
+Theorem pm10_25 : forall (P : forall (x : Type), Prop), (impl (all P) (ex P)).
 Proof.
     intros.
     assert (S1 : forall (x : Type) (Vx : (set x)), (impl (eq x x) (impl (all P) (ex P)))).
@@ -2363,154 +2362,369 @@ Proof.
     exact (mp ax_ex S3).
 Qed.
 
-Theorem pm10_251 : forall (P : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (not (P x)))) (not (all P))).
+Theorem pm10_251 : forall (P : forall (x : Type), Prop), (impl (all (fun (x : Type) => (not (P x)))) (not (all P))).
 Proof.
 Admitted.
 
-Theorem pm10_252 : forall (P : (forall (x : Type), Prop)), (bi (not (ex P)) (all (fun (x : Type) => (not (P x))))).
+Theorem pm10_252 : forall (P : forall (x : Type), Prop), (bi (not (ex P)) (all (fun (x : Type) => (not (P x))))).
 Proof.
 Admitted.
 
-Theorem pm10_253 : forall (P : (forall (x : Type), Prop)), (bi (not (all P)) (ex (fun (x : Type) => (not (P x))))).
+Theorem pm10_253 : forall (P : forall (x : Type), Prop), (bi (not (all P)) (ex (fun (x : Type) => (not (P x))))).
 Proof.
 Admitted.
 
-Theorem pm10_26 : forall (x : Type) (Vx : (set x)) (P Q : (forall (y : Type), Prop)), (impl (and (all (fun (y : Type) => (impl (P y) (Q y)))) (P x)) (Q x)).
+Theorem pm10_26 : forall (x : Type) (Vx : (set x)) (P Q : forall (y : Type), Prop), (impl (and (all (fun (y : Type) => (impl (P y) (Q y)))) (P x)) (Q x)).
 Proof.
 Admitted.
 
-Theorem pm10_27 : forall (P Q : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (all P) (all Q))).
+Theorem pm10_27 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (all P) (all Q))).
 Proof.
 Admitted.
 
-Theorem pm10_28 : forall (P Q : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (ex P) (ex Q))).
+Theorem pm10_28 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (ex P) (ex Q))).
 Proof.
 Admitted.
 
-Theorem pm10_281 : forall (P Q : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (bi (ex P) (ex Q))).
+Theorem pm10_281 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (bi (ex P) (ex Q))).
 Proof.
 Admitted.
 
-Theorem pm10_29 : forall (P Q R : (forall (x : Type), Prop)), (bi (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (P x) (R x))))) (all (fun (x : Type) => (impl (P x) (and (Q x) (R x)))))).
+Theorem pm10_29 : forall (P Q R : forall (x : Type), Prop), (bi (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (P x) (R x))))) (all (fun (x : Type) => (impl (P x) (and (Q x) (R x)))))).
 Proof.
 Admitted.
 
-Theorem pm10_3 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (Q x) (R x))))) (all (fun (x : Type) => (impl (P x) (R x))))).
+Theorem pm10_3 : forall (P Q R : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (Q x) (R x))))) (all (fun (x : Type) => (impl (P x) (R x))))).
 Proof.
 Admitted.
 
-Theorem pm10_301 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (all (fun (x : Type) => (bi (P x) (Q x)))) (all (fun (x : Type) => (bi (Q x) (R x))))) (all (fun (x : Type) => (bi (P x) (R x))))).
+Theorem pm10_301 : forall (P Q R : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (bi (P x) (Q x)))) (all (fun (x : Type) => (bi (Q x) (R x))))) (all (fun (x : Type) => (bi (P x) (R x))))).
 Proof.
 Admitted.
 
-Theorem pm10_31 : forall (P Q R : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (and (P x) (R x)) (and (Q x) (R x)))))).
+Theorem pm10_31 : forall (P Q R : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (impl (and (P x) (R x)) (and (Q x) (R x)))))).
 Proof.
 Admitted.
 
-Theorem pm10_311 : forall (P Q R : (forall (x : Type), Prop)), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (all (fun (x : Type) => (bi (and (P x) (R x)) (and (Q x) (R x)))))).
+Theorem pm10_311 : forall (P Q R : forall (x : Type), Prop), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (all (fun (x : Type) => (bi (and (P x) (R x)) (and (Q x) (R x)))))).
 Proof.
 Admitted.
 
-Theorem pm10_32 : forall (P Q : (forall (x : Type), Prop)), (bi (gimpl P Q) (gimpl Q P)).
+Theorem pm10_32 : forall (P Q : forall (x : Type), Prop), (bi (gimpl P Q) (gimpl Q P)).
 Proof.
 Admitted.
 
-Theorem pm10_321 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (gbi P Q) (gbi P R)) (gbi Q R)).
+Theorem pm10_321 : forall (P Q R : forall (x : Type), Prop), (impl (and (gbi P Q) (gbi P R)) (gbi Q R)).
 Proof.
 Admitted.
 
-Theorem pm10_322 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (gbi Q P) (gbi R P)) (gbi Q R)).
+Theorem pm10_322 : forall (P Q R : forall (x : Type), Prop), (impl (and (gbi Q P) (gbi R P)) (gbi Q R)).
 Proof.
 Admitted.
 
-Theorem pm10_33 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (all (fun (x : Type) => (and (Q x) p))) (and (all Q) p)).
+Theorem pm10_33 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (and (Q x) p))) (and (all Q) p)).
 Proof.
 Admitted.
 
-Theorem pm10_34 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (impl (Q x) p))) (impl (all Q) p)).
+Theorem pm10_34 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (ex (fun (x : Type) => (impl (Q x) p))) (impl (all Q) p)).
 Proof.
 Admitted.
 
-Theorem pm10_35 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (and p (Q x)))) (and p (ex Q))).
+Theorem pm10_35 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (ex (fun (x : Type) => (and p (Q x)))) (and p (ex Q))).
 Proof.
 Admitted.
 
-Theorem pm10_36 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (or (Q x) p))) (or (ex Q) p)).
+Theorem pm10_36 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (ex (fun (x : Type) => (or (Q x) p))) (or (ex Q) p)).
 Proof.
 Admitted.
 
-Theorem pm10_37 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (bi (ex (fun (x : Type) => (impl p (Q x)))) (impl p (ex Q))).
+Theorem pm10_37 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (ex (fun (x : Type) => (impl p (Q x)))) (impl p (ex Q))).
 Proof.
 Admitted.
 
-Theorem pm10_39 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gimpl P R) (gimpl Q S)) (gimpl (fun (x : Type) => (and (P x) (Q x))) (fun (x : Type) => (and (R x) (S x))))).
+Theorem pm10_39 : forall (P Q R S : forall (x : Type), Prop), (impl (and (gimpl P R) (gimpl Q S)) (gimpl (fun (x : Type) => (and (P x) (Q x))) (fun (x : Type) => (and (R x) (S x))))).
 Proof.
 Admitted.
 
-Theorem pm10_4 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (and (P x) (Q x))) (fun (x : Type) => (and (R x) (S x))))).
+Theorem pm10_4 : forall (P Q R S : forall (x : Type), Prop), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (and (P x) (Q x))) (fun (x : Type) => (and (R x) (S x))))).
 Proof.
 Admitted.
 
-Theorem pm10_41 : forall (P Q : (forall (x : Type), Prop)), (impl (or (all P) (all Q)) (all (fun (x : Type) => (or (P x) (Q x))))).
+Theorem pm10_41 : forall (P Q : forall (x : Type), Prop), (impl (or (all P) (all Q)) (all (fun (x : Type) => (or (P x) (Q x))))).
 Proof.
 Admitted.
 
-Theorem pm10_411 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (or (P x) (Q x))) (fun (x : Type) => (or (R x) (S x))))).
+Theorem pm10_411 : forall (P Q R S : forall (x : Type), Prop), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (or (P x) (Q x))) (fun (x : Type) => (or (R x) (S x))))).
 Proof.
 Admitted.
 
-Theorem pm10_412 : forall (P Q : (forall (x : Type), Prop)), (bi (gbi P Q) (gbi (fun (x : Type) => (not (P x))) (fun (x : Type) => (not (Q x))))).
+Theorem pm10_412 : forall (P Q : forall (x : Type), Prop), (bi (gbi P Q) (gbi (fun (x : Type) => (not (P x))) (fun (x : Type) => (not (Q x))))).
 Proof.
 Admitted.
 
-Theorem pm10_413 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (impl (P x) (Q x))) (fun (x : Type) => (impl (R x) (S x))))).
+Theorem pm10_413 : forall (P Q R S : forall (x : Type), Prop), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (impl (P x) (Q x))) (fun (x : Type) => (impl (R x) (S x))))).
 Proof.
 Admitted.
 
-Theorem pm10_414 : forall (P Q R S : (forall (x : Type), Prop)), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (bi (P x) (Q x))) (fun (x : Type) => (bi (R x) (S x))))).
+Theorem pm10_414 : forall (P Q R S : forall (x : Type), Prop), (impl (and (gbi P R) (gbi Q S)) (gbi (fun (x : Type) => (bi (P x) (Q x))) (fun (x : Type) => (bi (R x) (S x))))).
 Proof.
 Admitted.
 
-Theorem pm10_42 : forall (P Q : (forall (x : Type), Prop)), (bi (or (ex P) (ex Q)) (ex (fun (x : Type) => (or (P x) (Q x))))).
+Theorem pm10_42 : forall (P Q : forall (x : Type), Prop), (bi (or (ex P) (ex Q)) (ex (fun (x : Type) => (or (P x) (Q x))))).
 Proof.
 Admitted.
 
-Theorem pm10_43 : forall {x : Type} (Vx : (set x)) (P Q : (forall (x : Type), Prop)), (bi (and (gbi P Q) (P x)) (and (gbi P Q) (Q x))).
+Theorem pm10_43 : forall {x : Type} (Vx : (set x)) (P Q : forall (x : Type), Prop), (bi (and (gbi P Q) (P x)) (and (gbi P Q) (Q x))).
 Proof.
 Admitted.
 
-Theorem pm10_5 : forall (P Q : (forall (x : Type), Prop)), (impl (ex (fun (x : Type) => (and (P x) (Q x)))) (and (ex P) (ex Q))).
+Theorem pm10_5 : forall (P Q : forall (x : Type), Prop), (impl (ex (fun (x : Type) => (and (P x) (Q x)))) (and (ex P) (ex Q))).
 Proof.
 Admitted.
 
-Theorem pm10_51 : forall (P Q : (forall (x : Type), Prop)), (bi (not (ex (fun (x : Type) => (and (P x) (Q x))))) (gimpl P (fun (x : Type) => (not (Q x))))).
+Theorem pm10_51 : forall (P Q : forall (x : Type), Prop), (bi (not (ex (fun (x : Type) => (and (P x) (Q x))))) (gimpl P (fun (x : Type) => (not (Q x))))).
 Proof.
 Admitted.
 
-Theorem pm10_52 : forall (p : Prop) (Q : (forall (x : Type), Prop)), (impl (ex Q) (bi (all (fun (x : Type) => (impl (Q x) p))) p)).
+Theorem pm10_52 : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (ex Q) (bi (all (fun (x : Type) => (impl (Q x) p))) p)).
 Proof.
 Admitted.
 
-Theorem pm10_53 : forall (P Q : (forall (x : Type), Prop)), (impl (not (ex P)) (gimpl P Q)).
+Theorem pm10_53 : forall (P Q : forall (x : Type), Prop), (impl (not (ex P)) (gimpl P Q)).
 Proof.
 Admitted.
 
-Theorem pm10_541 : forall (p : Prop) (Q R : (forall (x : Type), Prop)), (bi (gimpl Q (fun (x : Type) => (or p (R x)))) (or p (gimpl Q R))).
+Theorem pm10_541 : forall (p : Prop) (Q R : forall (x : Type), Prop), (bi (gimpl Q (fun (x : Type) => (or p (R x)))) (or p (gimpl Q R))).
 Proof.
 Admitted.
 
-Theorem pm10_542 : forall (p : Prop) (Q R : (forall (x : Type), Prop)), (bi (gimpl Q (fun (x : Type) => (impl p (R x)))) (impl p (gimpl Q R))).
+Theorem pm10_542 : forall (p : Prop) (Q R : forall (x : Type), Prop), (bi (gimpl Q (fun (x : Type) => (impl p (R x)))) (impl p (gimpl Q R))).
 Proof.
 Admitted.
 
-Theorem pm10_55 : forall (P Q : (forall (x : Type), Prop)), (bi (and (ex (fun (x : Type) => (and (P x) (Q x)))) (gimpl P Q)) (and (ex P) (gimpl P Q))).
+Theorem pm10_55 : forall (P Q : forall (x : Type), Prop), (bi (and (ex (fun (x : Type) => (and (P x) (Q x)))) (gimpl P Q)) (and (ex P) (gimpl P Q))).
 Proof.
 Admitted.
 
-Theorem pm10_56 : forall (P Q R : (forall (x : Type), Prop)), (impl (and (gimpl P Q) (ex (fun (x : Type) => (and (P x) (R x))))) (ex (fun (x : Type) => (and (Q x) (R x))))).
+Theorem pm10_56 : forall (P Q R : forall (x : Type), Prop), (impl (and (gimpl P Q) (ex (fun (x : Type) => (and (P x) (R x))))) (ex (fun (x : Type) => (and (Q x) (R x))))).
 Proof.
 Admitted.
 
-Theorem pm10_57 : forall (P Q R : (forall (x : Type), Prop)), (impl (gimpl P (fun (x : Type) => (or (Q x) (R x)))) (or (gimpl P Q) (ex (fun (x : Type) => (and (P x) (R x)))))).
+Theorem pm10_57 : forall (P Q R : forall (x : Type), Prop), (impl (gimpl P (fun (x : Type) => (or (Q x) (R x)))) (or (gimpl P Q) (ex (fun (x : Type) => (and (P x) (R x)))))).
+Proof.
+Admitted.
+
+Theorem pm11_1 : forall {x y : Type} (Vx : (set x)) (Vy : (set y)) (P : forall (z w : Type), Prop), (impl (all (fun (z : Type) => (all (fun (w : Type) => (P z w))))) (P x y)).
+Proof.
+Admitted.
+
+Theorem pm11_11 : forall (P : forall (x y : Type), Prop) (H : forall (x y : Type) (Vx : (set x)) (Vy : (set y)), (P x y)), (all (fun (x : Type) => (all (fun (y : Type) => (P x y))))).
+Proof.
+Admitted.
+
+Theorem pm11_12 : forall (p : Prop) (Q : forall (x y : Type), Prop), (impl (all (fun (x : Type) => (all (fun (y : Type) => (or p (Q x y)))))) (or p (all (fun (x : Type) => (all (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_14 : forall {x y : Type} (Vx : (set x)) (Vy : (set y)) (P Q : forall (z w : Type), Prop), (impl (and (all (fun (z : Type) => (all (fun (w : Type) => (P z w))))) (all (fun (z : Type) => (all (fun (w : Type) => (Q z w)))))) (and (P x y) (Q x y))).
+Proof.
+Admitted.
+
+Theorem pm11_2 : forall (P : forall (x y : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (all (fun (y : Type) => (all (fun (x : Type) => (P x y)))))).
+Proof.
+Admitted.
+
+Theorem pm11_21 : forall (P : forall (x y z : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (all (fun (z : Type) => (P x y z))))))) (all (fun (y : Type) => (all (fun (z : Type) => (all (fun (x : Type) => (P x y z)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_22 : forall (P : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y))))) (not (all (fun (x : Type) => (all (fun (y : Type) => (not (P x y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_23 : forall (P : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y))))) (ex (fun (y : Type) => (ex (fun (x : Type) => (P x y)))))).
+Proof.
+Admitted.
+
+Theorem pm11_24 : forall (P : forall (x y z : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (ex (fun (z : Type) => (P x y z))))))) (ex (fun (y : Type) => (ex (fun (z : Type) => (ex (fun (x : Type) => (P x y z)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_25 : forall (P : forall (x y : Type), Prop), (bi (not (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (not (P x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_26 : forall (P : forall (x y : Type), Prop), (impl (ex (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (all (fun (x : Type) => (ex (fun (y : Type) => (P x y)))))).
+Proof.
+Admitted.
+
+Theorem pm11_3 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (impl p (all (fun (x : Type) => (all (fun (y : Type) => (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl p (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_31 : forall (P Q : forall (x y : Type), Prop), (bi (and (all (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (all (fun (x : Type) => (all (fun (y : Type) => (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (and (P x y) (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_32 : forall (P Q : forall (x y : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y)))))) (impl (all (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (all (fun (x : Type) => (all (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_33 : forall (P Q : forall (x y : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (Q x y)))))) (bi (all (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (all (fun (x : Type) => (all (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_34 : forall (P Q : forall (x y : Type), Prop), (impl (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y)))))) (impl (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_341 : forall (P Q : forall (x y : Type), Prop), (impl (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (Q x y)))))) (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_35 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (impl (Q x y) p))))) (impl (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y))))) p)).
+Proof.
+Admitted.
+
+Theorem pm11_36 : forall {x y : Type} (Vx : (set x)) (Vy : (set y)) (P : forall (w z : Type), Prop), (impl (P x y) (ex (fun (w : Type) => (ex (fun (z : Type) => (P w z)))))).
+Proof.
+Admitted.
+
+Theorem pm11_37 : forall (P Q R : forall (x y : Type), Prop), (impl (and (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (Q x y) (R x y))))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (R x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_371 : forall (P Q R : forall (x y : Type), Prop), (impl (and (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (bi (Q x y) (R x y))))))) (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (R x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_38 : forall (P Q R : forall (x y : Type), Prop), (impl (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (and (P x y) (R x y)) (and (Q x y) (R x y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_39 : forall (P Q R S : forall (x y : Type), Prop), (impl (and (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (R x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (Q x y) (S x y))))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (and (P x y) (Q x y)) (and (R x y) (S x y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_391 : forall (P Q R : forall (x y : Type), Prop), (bi (and (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (R x y))))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (and (Q x y) (R x y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_4 : forall (P Q R S : forall (x y : Type), Prop), (impl (and (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (R x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (bi (Q x y) (S x y))))))) (all (fun (x : Type) => (all (fun (y : Type) => (bi (and (P x y) (Q x y)) (and (R x y) (S x y)))))))).
+Proof.
+    intros.
+    pose (S1 := (pm11_31 (fun (x y : Type) => (bi (P x y) (R x y))) (fun (x y : Type) => (bi (Q x y) (S x y))))).
+    assert (S2 : forall (x y : Type) (Vx : (set x)) (Vy : (set y)), (impl (and (bi (P x y) (R x y)) (bi (Q x y) (S x y))) (bi (and (P x y) (Q x y)) (and (R x y) (S x y))))).
+    intros.
+    exact (pm4_38 (P x y) (Q x y) (R x y) (S x y)).
+    exact (syll (andeli S1) (mp ((pm11_11 (fun (x y : Type) => (impl (and (bi (P x y) (R x y)) (bi (Q x y) (S x y))) (bi (and (P x y) (Q x y)) (and (R x y) (S x y)))))) S2) (andeli (pm11_32 (fun (x y : Type) => (and (bi (P x y) (R x y)) (bi (Q x y) (S x y)))) (fun (x y : Type) => (bi (and (P x y) (Q x y)) (and (R x y) (S x y)))))))).
+Qed.
+
+Theorem pm11_401 : forall (P Q R : forall (x y : Type), Prop), (impl (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (bi (and (P x y) (R x y)) (and (Q x y) (R x y)))))))).
+Proof.
+    intros.
+    assert (S1 : (forall (x y : Type) (Vx : (set x)) (Vy : (set y)), (bi (R x y) (R x y)))).
+    intros.
+    exact (bi_id (R x y)).
+    exact (syll (andd (id (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (Q x y))))))) (impliri (all (fun (x : Type) => (all (fun (y : Type) => (bi (P x y) (Q x y)))))) (pm11_11 (fun (x y : Type) => (bi (R x y) (R x y))) S1))) (pm11_4 P R Q R)).
+Qed.
+
+Theorem pm11_41 : forall (P Q : forall (x y : Type), Prop), (bi (or (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y)))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (or (P x y) (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_42 : forall (P Q : forall (x y : Type), Prop), (impl (ex (fun (x : Type) => (ex (fun (y : Type) => (and (P x y) (Q x y)))))) (and (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_421 : forall (P Q : forall (x y : Type), Prop), (impl (or (all (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (all (fun (x : Type) => (all (fun (y : Type) => (Q x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (or (P x y) (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_43 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (impl (Q x y) p))))) (impl (all (fun (x : Type) => (all (fun (y : Type) => (Q x y))))) p)).
+Proof.
+Admitted.
+
+Theorem pm11_44 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (or (Q x y) p))))) (or (all (fun (x : Type) => (all (fun (y : Type) => (Q x y))))) p)).
+Proof.
+Admitted.
+
+Theorem pm11_45 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (and p (Q x y)))))) (and p (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_46 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (impl p (Q x y)))))) (impl p (ex (fun (x : Type) => (ex (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_47 : forall (p : Prop) (Q : forall (x y : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (and p (Q x y)))))) (and p (all (fun (x : Type) => (all (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_5 : forall (P : forall (x y : Type), Prop), (bi3 (ex (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (not (all (fun (x : Type) => (all (fun (y : Type) => (P x y)))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (not (P x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_51 : forall (P : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (all (fun (y : Type) => (P x y))))) (not (all (fun (x : Type) => (ex (fun (y : Type) => (not (P x y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_52 : forall (P Q : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (and (P x y) (Q x y)))))) (not (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (not (Q x y))))))))).
+Proof.
+Admitted.
+
+Theorem pm11_521 : forall (P Q : forall (x y : Type), Prop), (bi (not (ex (fun (x : Type) => (ex (fun (y : Type) => (and (P x y) (not (Q x y)))))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_53 : forall (P Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x) (Q y)))))) (impl (ex P) (all Q))).
+Proof.
+Admitted.
+
+Theorem pm11_54 : forall (P Q : forall (x : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (and (P x) (Q y)))))) (and (ex P) (ex Q))).
+Proof.
+Admitted.
+
+Theorem pm11_55 : forall (P : forall (x : Type), Prop) (Q : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (and (P x) (Q x y)))))) (ex (fun (x : Type) => (and (P x) (ex (fun (y : Type) => (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_56 : forall (P Q : forall (x : Type), Prop), (bi (and (all P) (all Q)) (all (fun (x : Type) => (all (fun (y : Type) => (and (P x) (Q y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_57 : forall (P : forall (x : Type), Prop), (bi (all P) (all (fun (x : Type) => (all (fun (y : Type) => (and (P x) (P y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_58 : forall (P : forall (x : Type), Prop), (bi (ex P) (ex (fun (x : Type) => (ex (fun (y : Type) => (and (P x) (P y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_59 : forall (P Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (impl (P x) (Q x)))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (and (P x) (P y)) (and (Q x) (Q y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_6 : forall (P : forall (x y : Type), Prop) (Q R : forall (x : Type), Prop), (bi (ex (fun (x : Type) => (and (ex (fun (y : Type) => (and (P x y) (Q y)))) (R x)))) (ex (fun (y : Type) => (and (ex (fun (x : Type) => (and (P x y) (R x)))) (Q y))))).
+Proof.
+Admitted.
+
+Theorem pm11_61 : forall (P : forall (x y : Type), Prop) (Q : forall (x : Type), Prop), (impl (ex (fun (y : Type) => (all (fun (x : Type) => (impl (Q x) (P x y)))))) (all (fun (x : Type) => (impl (Q x) (ex (fun (y : Type) => (P x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_62 : forall (P Q : forall (x y : Type), Prop) (R : forall (x : Type), Prop), (bi (all (fun (x : Type) => (all (fun (y : Type) => (impl (and (R x) (P x y)) (Q x y)))))) (all (fun (x : Type) => (impl (R x) (all (fun (y : Type) => (impl (P x y) (Q x y)))))))).
+Proof.
+Admitted.
+
+Theorem pm11_63 : forall (P Q : forall (x y : Type), Prop), (impl (not (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y)))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (P x y) (Q x y))))))).
+Proof.
+Admitted.
+
+Theorem pm11_7 : forall (P : forall (x y : Type), Prop), (bi (ex (fun (x : Type) => (ex (fun (y : Type) => (or (P x y) (P y x)))))) (ex (fun (x : Type) => (ex (fun (y : Type) => (P x y)))))).
+Proof.
+Admitted.
+
+Theorem pm11_71 : forall (P Q R S : forall (x : Type), Prop), (impl (and (ex P) (ex Q)) (bi (and (all (fun (x : Type) => (impl (P x) (R x)))) (all (fun (x : Type) => (impl (Q x) (S x))))) (all (fun (x : Type) => (all (fun (y : Type) => (impl (and (P x) (Q y)) (and (R x) (S y))))))))).
 Proof.
 Admitted.
