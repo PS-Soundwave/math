@@ -2322,6 +2322,42 @@ Proof.
     exact (andi S7 S9).
 Qed.
 
+Theorem quant_and : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (and (P x) (Q x)))) (and (all P) (all Q))).
+Proof.
+    intros.
+    exact (andeli (pm10_22 P Q)).
+Qed.
+
+Theorem quant_andi : forall {P Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (and (P x) (Q x))))), (and (all P) (all Q)).
+Proof.
+    intros.
+    exact (mp H (quant_and P Q)).
+Qed.
+
+Theorem quant_andd : forall {p : Prop} {Q R : forall (x : Type), Prop} (H : (impl p (all (fun (x : Type) => (and (Q x) (R x)))))), (impl p (and (all Q) (all R))).
+Proof.
+    intros.
+    exact (syll H (quant_and Q R)).
+Qed.
+
+Theorem gen_and : forall (P Q : forall (x : Type), Prop), (impl (and (all P) (all Q)) (all (fun (x : Type) => (and (P x) (Q x))))).
+Proof.
+    intros.
+    exact (anderi (pm10_22 P Q)).
+Qed.
+
+Theorem gen_andi : forall {P Q : forall (x : Type), Prop} (H : (and (all P) (all Q))), (all (fun (x : Type) => (and (P x) (Q x)))).
+Proof.
+    intros.
+    exact (mp H (gen_and P Q)).
+Qed.
+
+Theorem gen_andd : forall {p : Prop} {Q R : forall (x : Type), Prop} (H : (impl p (and (all Q) (all R)))), (impl p (all (fun (x : Type) => (and (Q x) (R x))))).
+Proof.
+    intros.
+    exact (syll H (gen_and Q R)).
+Qed.
+
 Theorem pm10_23 : forall (p : Prop) (Q : forall (x : Type), Prop), (bi (all (fun (x : Type) => (impl (Q x) p))) (impl (ex Q) p)).
 Proof.
     intros.
@@ -2381,6 +2417,24 @@ Admitted.
 Theorem pm10_27 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (all P) (all Q))).
 Proof.
 Admitted.
+
+Theorem quant_impl : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (all P) (all Q))).
+Proof.
+    intros.
+    exact (pm10_27 P Q).
+Qed.
+
+Theorem quant_impli : forall {P Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (impl (P x) (Q x))))), (impl (all P) (all Q)).
+Proof.
+    intros.
+    exact (mp H (quant_impl P Q)).
+Qed.
+
+Theorem quant_impld : forall {p : Prop} {Q R : forall (x : Type), Prop} (H : (impl p (all (fun (x : Type) => (impl (Q x) (R x)))))), (impl p (impl (all Q) (all R))).
+Proof.
+    intros.
+    exact (syll H (quant_impl Q R)).
+Qed.
 
 Theorem pm10_28 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (ex P) (ex Q))).
 Proof.
