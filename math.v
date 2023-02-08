@@ -2219,7 +2219,7 @@ Definition ex := fun (P : forall (x : Type), Prop) => (not (all (fun (x : Type) 
 Definition eq := fun (x y : Type) => (all (fun (z : Type) => (bi (el z x) (el z y)))).
 
 Axiom ax_spec : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (all P) (P x)).
-Axiom ax_gen : forall (P : forall (x : Type), Prop) (H : forall (x : Type) (Vx : (set x)), (P x)), (all P).
+Axiom ax_gen : forall {P : forall (x : Type), Prop} (H : forall (x : Type) (Vx : (set x)), (P x)), (all P).
 Axiom ax_quant_impl : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
 Axiom ax_ex : (ex (fun (x : Type) => (eq x x))).
 
@@ -2235,7 +2235,7 @@ Qed.
 Theorem pm10_11 : forall (P : forall (x : Type), Prop) (H : forall (x : Type) (Vx : (set x)), (P x)), (all P).
 Proof.
     intros.
-    exact (ax_gen P H).
+    exact (ax_gen H).
 Qed.
 
 Theorem pm10_12 : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (or p (Q x)))) (or p (all Q))).
@@ -2265,13 +2265,13 @@ Proof.
     pose (S4 := (impliri (all (fun (y : Type) => (or p (Q y)))) (implir (not p) (Q x)))).
     pose (S5 := (impliri (all (fun (y : Type) => (or p (Q y)))) (syll (notdi p) (implil (not p) (Q x))))).
     exact (ored S3 S5 S4).
-    exact (ax_gen (fun (x : Type) => (impl (all (fun (y : Type) => (impl (or p (Q y)) (impl (not p) (Q y))))) (impl (all (fun (y : Type) => (or p (Q y)))) (impl (not p) (Q x))))) S3).
+    exact (ax_gen S3).
     assert (S2 : forall (x : Type) (Vx : (set x)), (impl (or p (Q x)) (impl (not p) (Q x)))).
     intros.
     pose (S2 := (implir (not p) (Q x))).
     pose (S3 := (syll (notdi p) (implil (not p) (Q x)))).
     exact (ore S3 S2).
-    exact (ax_gen (fun (x : Type) => (impl (or p (Q x)) (impl (not p) (Q x)))) S2).
+    exact (ax_gen S2).
 Qed.
 
 Theorem pm10_14 : forall {x : Type} (Vx : (set x)) (P Q : forall (y : Type), Prop), (impl (and (all P) (all Q)) (and (P x) (Q x))).
@@ -2357,7 +2357,7 @@ Proof.
     intros.
     pose (S1 := (syll (pm10_1 Vx P) (pm10_24 Vx P))).
     exact (impliri (eq x x) S1).
-    pose (S2 := (ax_gen (fun (x : Type) => (impl (eq x x) (impl (all P) (ex P)))) S1)).
+    pose (S2 := (ax_gen S1)).
     pose (S3 := (mp S2 (andeli (pm10_23 (impl (all P) (ex P)) (fun (x : Type) => (eq x x)))))).
     exact (mp ax_ex S3).
 Qed.
