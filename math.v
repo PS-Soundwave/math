@@ -2410,7 +2410,7 @@ Theorem pm10_311 : forall (P Q R : forall (x : Type), Prop), (impl (all (fun (x 
 Proof.
 Admitted.
 
-Theorem pm10_32 : forall (P Q : forall (x : Type), Prop), (bi (gimpl P Q) (gimpl Q P)).
+Theorem pm10_32 : forall (P Q : forall (x : Type), Prop), (bi (gbi P Q) (gbi Q P)).
 Proof.
 Admitted.
 
