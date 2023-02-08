@@ -1708,6 +1708,62 @@ Proof.
     exact (mp (andi H0 H1) (pm4_22 p q r)).
 Qed.
 
+Theorem bi_sublc : forall (p q r : Prop), (impl (and (bi p q) (bi p r)) (bi q r)).
+Proof.
+    intros.
+    pose (S1 := (bi_trans q p r)).
+    pose (S2 := (bi_comm p q)).
+    pose (S3 := (and_subl S2 (bi p r))).
+    exact (syll S3 S1).
+Qed.
+
+Theorem bi_subld : forall {p q r s : Prop} (H0 : (impl p (bi q r))) (H1 : (impl p (bi q s))), (impl p (bi r s)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (bi_sublc q r s)).
+Qed.
+
+Theorem bi_subl : forall {p q : Prop} (H : (bi p q)) (r : Prop), (impl (bi p r) (bi q r)).
+Proof.
+    intros.
+    pose (S1 := (impliri (bi p r) H)).
+    pose (S2 := (id (bi p r))).
+    exact (bi_subld S1 S2).
+Qed.
+
+Theorem bi_subli : forall {p q r : Prop} (H0 : (bi p q)) (H1 : (bi p r)), (bi q r).
+Proof.
+    intros.
+    exact (mp H1 (bi_subl H0 r)).
+Qed.
+
+Theorem bi_subrc : forall (p q r : Prop), (impl (and (bi p q) (bi r p)) (bi r q)).
+Proof.
+    intros.
+    pose (S1 := (bi_trans r p q)).
+    exact (syll (and_comm (bi p q) (bi r p)) S1).
+Qed.
+
+Theorem bi_subrd : forall {p q r s : Prop} (H0 : (impl p (bi q r))) (H1 : (impl p (bi s q))), (impl p (bi s r)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (bi_subrc q r s)).
+Qed.
+
+Theorem bi_subr : forall {p q : Prop} (H : (bi p q)) (r : Prop), (impl (bi r p) (bi r q)).
+Proof.
+    intros.
+    pose (S1 := (impliri (bi r p) H)).
+    pose (S2 := (id (bi r p))).
+    exact (bi_subrd S1 S2).
+Qed.
+
+Theorem bi_subri : forall {p q r : Prop} (H0 : (bi p q)) (H1 : (bi r p)), (bi r q).
+Proof.
+    intros.
+    exact (mp H1 (bi_subr H0 r)).
+Qed.
+
 Theorem pm4_24 : forall (p : Prop), (bi p (and p p)).
 Proof.
     intros.
