@@ -509,7 +509,7 @@ Proof.
     exact (mp H1 S2).
 Qed.
 
-Theorem orird : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl p (or r q)).
+Theorem orird : forall {p q : Prop} (r : Prop) (H : (impl p q)), (impl p (or r q)).
 Proof.
     intros.
     exact (syll H (orir r q)).
@@ -521,7 +521,7 @@ Proof.
     exact (syll H (or_comm q r)).
 Qed.
 
-Theorem implird : forall {p q : Prop} (H : (impl p q)) (r : Prop), (impl p (impl r q)).
+Theorem implird : forall {p q : Prop} (r : Prop) (H : (impl p q)), (impl p (impl r q)).
 Proof.
     intros.
     exact (syll H (implir r q)).
@@ -1302,6 +1302,24 @@ Proof.
     exact (pm3_3 p q r).
 Qed.
 
+Theorem exp : forall (p q r : Prop), (impl (impl (and p q) r) (impl p (impl q r))).
+Proof.
+    intros.
+    exact (pm3_3 p q r).
+Qed.
+
+Theorem expi : forall {p q r : Prop} (H : (impl (and p q) r)), (impl p (impl q r)).
+Proof.
+    intros.
+    exact (mp H (exp p q r)).
+Qed.
+
+Theorem expd : forall {p q r s : Prop} (H : (impl p (impl (and q r) s))), (impl p (impl q (impl r s))).
+Proof.
+    intros.
+    exact (syll H (exp q r s)).
+Qed.
+
 Theorem pm3_31 : forall (p q r : Prop), (impl (impl p (impl q r)) (impl (and p q) r)).
 Proof.
     intros.
@@ -1314,6 +1332,24 @@ Theorem pm_imp : forall (p q r : Prop), (impl (impl p (impl q r)) (impl (and p q
 Proof.
     intros.
     exact (pm3_31 p q r).
+Qed.
+
+Theorem imp : forall (p q r : Prop), (impl (impl p (impl q r)) (impl (and p q) r)).
+Proof.
+    intros.
+    exact (pm3_31 p q r).
+Qed.
+
+Theorem impi : forall {p q r : Prop} (H : (impl p (impl q r))), (impl (and p q) r).
+Proof.
+    intros.
+    exact (mp H (imp p q r)).
+Qed.
+
+Theorem impd : forall {p q r s : Prop} (H : (impl p (impl q (impl r s)))), (impl p (impl (and q r) s)).
+Proof.
+    intros.
+    exact (syll H (imp q r s)).
 Qed.
 
 Theorem or_subrc : forall (p q r : Prop), (impl (and (impl p q) (or r p)) (or r q)).
@@ -2279,6 +2315,107 @@ Axiom ax_gen : forall {P : forall (x : Type), Prop} (H : forall (x : Type) (Vx :
 Axiom ax_quant_impl : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl p (Q x)))) (impl p (all Q))).
 Axiom ax_ex : (ex (fun (x : Type) => (eq x x))).
 
+Definition false := (not (ex (fun (x : Type) => (eq x x)))).
+
+Theorem falsee : forall (p : Prop), (impl false p).
+Proof.
+    intros.
+    pose (S1 := (id false)).
+    pose (S2 := (implild S1 p)).
+    pose (S3 := ax_ex).
+    pose (S4 := (impliri false S3)).
+    exact (mpd S4 S2).
+Qed.
+
+Theorem falseei : forall (H : false) (p : Prop), p.
+Proof.
+    intros.
+    exact (mp H (falsee p)).
+Qed.
+
+Theorem falseed : forall {p : Prop} (H : (impl p false)) (q : Prop), (impl p q).
+Proof.
+    intros.
+    exact (syll H (falsee q)).
+Qed.
+
+Theorem note : forall (p q : Prop), (impl (and p (not p)) q).
+Proof.
+    intros.
+    pose (S1 := (id (and p (not p)))).
+    pose (S2 := (anderd S1)).
+    pose (S3 := (implild S2 q)).
+    pose (S4 := (andeld S1)).
+    exact (mpd S4 S3).
+Qed.
+
+Theorem notei : forall {p : Prop} (H0 : p) (H1 : (not p)) (q : Prop), q.
+Proof.
+    intros.
+    exact (mp (andi H0 H1) (note p q)).
+Qed.
+
+Theorem noted : forall {p q : Prop} (H0 : (impl p q)) (H1 : (impl p (not q))) (r : Prop), (impl p r).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (note q r)).
+Qed.
+
+Theorem noti : forall (p : Prop), (impl (impl p false) (not p)).
+Proof.
+    intros.
+    pose (S1 := ((ex_mid p))).
+    pose (S2 := (impliri (impl p false) S1)).
+    pose (S3 := (id (not p))).
+    pose (S4 := (impliri (impl p false) S3)).
+    pose (S5 := (id (impl p false))).
+    pose (S6 := (implird p S5)).
+    pose (S7 := (id p)).
+    pose (S8 := (impliri (impl p false) S7)).
+    pose (S9 := (impi S6)).
+    pose (S10 := (impi S8)).
+    pose (S11 := (mpd S10 S9)).
+    pose (S12 := (falseed S11 (not p))).
+    pose (S13 := (expi S12)).
+    exact (ored S2 S13 S4).
+Qed.
+
+Theorem notid : forall {p q : Prop} (H : (impl p (impl q false))), (impl p (not q)).
+Proof.
+    intros.
+    exact (syll H (noti q)).
+Qed.
+
+Theorem notii : forall {p : Prop} (H : (impl p false)), (not p).
+Proof.
+    intros.
+    exact (mp H (noti p)).
+Qed.
+
+Theorem ax_speci : forall {x : Type} (Vx : (set x)) {P : forall (y : Type), Prop} (H : (all P)), (P x).
+Proof.
+    intros.
+    exact (mp H (ax_spec Vx P)).
+Qed.
+
+Theorem ax_specd : forall {x : Type} (Vx : (set x)) {p : Prop} {Q : forall (y : Type), Prop} (H : (impl p (all Q))), (impl p (Q x)).
+Proof.
+    intros.
+    exact (syll H (ax_spec Vx Q)).
+Qed.
+
+Theorem ax_quant_impli : forall {p : Prop} {Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (impl p (Q x))))), (impl p (all Q)).
+Proof.
+    intros.
+    exact (mp H (ax_quant_impl p Q)).
+Qed.
+
+Theorem ax_quant_impld : forall {p q : Prop} {R : forall (x : Type), Prop} (H : (impl p (all (fun (x : Type) => (impl q (R x)))))), (impl p (impl q (all R))).
+Proof.
+    intros.
+    exact (syll H (ax_quant_impl q R)).
+Qed.
+
 Definition gimpl := fun (P Q : forall (x : Type), Prop) => (all (fun (x : Type) => (impl (P x) (Q x)))).
 Definition gbi := fun (P Q : forall (x : Type), Prop) => (all (fun (x : Type) => (bi (P x) (Q x)))).
 
@@ -2442,6 +2579,24 @@ Proof.
     exact (mp S1 (pm_transp1 (all (fun (y : Type) => (not (P y)))) (P x))).
 Qed.
 
+Theorem exi : forall {x : Type} (Vx : (set x)) (P : (forall (y : Type), Prop)), (impl (P x) (ex P)).
+Proof.
+    intros.
+    exact (pm10_24 Vx P).
+Qed.
+
+Theorem exii : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop) (H : (P x)), (ex P).
+Proof.
+    intros.
+    exact (mp H (exi Vx P)).
+Qed.
+
+Theorem exid : forall {x : Type} {p : Prop} (Vx : (set x)) (P : forall (y : Type), Prop) (H : (impl p (P x))), (impl p (ex P)).
+Proof.
+    intros.
+    exact (syll H (exi Vx P)).
+Qed.
+
 Theorem pm10_25 : forall (P : forall (x : Type), Prop), (impl (all P) (ex P)).
 Proof.
     intros.
@@ -2495,6 +2650,32 @@ Qed.
 Theorem pm10_28 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (ex P) (ex Q))).
 Proof.
 Admitted.
+
+Theorem ex_subc : forall (P Q : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (impl (P x) (Q x)))) (ex P)) (ex Q)).
+Proof.
+    intros.
+    exact (impi (pm10_28 P Q)).
+Qed.
+
+Theorem ex_subd : forall {p : Prop} {Q R : forall (x : Type), Prop} (H0 : (impl p (all (fun (x : Type) => (impl (Q x) (R x)))))) (H1 : (impl p (ex Q))), (impl p (ex R)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (ex_subc Q R)).
+Qed.
+
+Theorem ex_sub : forall {P Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (impl (P x) (Q x))))), (impl (ex P) (ex Q)).
+Proof.
+    intros.
+    pose (S1 := (impliri (ex P) H)).
+    pose (S2 := (id (ex P))).
+    exact (ex_subd S1 S2).
+Qed.
+
+Theorem ex_subi : forall {P Q : forall (x : Type), Prop} (H0 : (all (fun (x : Type) => (impl (P x) (Q x))))) (H1 : (ex P)), (ex Q).
+Proof.
+    intros.
+    exact (mp H1 (ex_sub H0)).
+Qed.
 
 Theorem pm10_281 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (bi (ex P) (ex Q))).
 Proof.
@@ -2599,6 +2780,27 @@ Admitted.
 Theorem pm10_52 : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (ex Q) (bi (all (fun (x : Type) => (impl (Q x) p))) p)).
 Proof.
 Admitted.
+
+Theorem exe : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (impl (Q x) p))) (ex Q)) p).
+Proof.
+    intros.
+    pose (S1 := (pm10_52 p Q)).
+    pose (S2 := (andeld S1)).
+    pose (S3 := (impi S2)).
+    exact (syll (and_comm (all (fun (x : Type) => (impl (Q x) p))) (ex Q)) S3).
+Qed.
+
+Theorem exed : forall {p q : Prop} {R : forall (x : Type), Prop} (H0 : (impl p (all (fun (x : Type) => (impl (R x) q))))) (H1 : (impl p (ex R))), (impl p q).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (exe q R)).
+Qed.
+
+Theorem exei : forall {p : Prop} {Q : forall (x : Type), Prop} (H0 : (all (fun (x : Type) => (impl (Q x) p)))) (H1 : (ex Q)), p.
+Proof.
+    intros.
+    exact (mp (andi H0 H1) (exe p Q)).
+Qed.
 
 Theorem pm10_53 : forall (P Q : forall (x : Type), Prop), (impl (not (ex P)) (gimpl P Q)).
 Proof.
@@ -2840,3 +3042,576 @@ Admitted.
 Theorem pm11_71 : forall (P Q R S : forall (x : Type), Prop), (impl (and (ex P) (ex Q)) (bi (and (gimpl P R) (gimpl Q S)) (gimpl2 (fun (x : Type) => (fun (y : Type) => (and (P x) (Q y)))) (fun (x : Type) => (fun (y : Type) => (and (R x) (S y))))))).
 Proof.
 Admitted.
+
+Theorem tz4_7_1 : forall (A : Type), (eq A A).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (bi (el x A) (el x A))).
+    intros.
+    exact (bi_id (el x A)).
+    exact (ax_gen S1).
+Qed.
+
+Theorem eq_refl : forall (A : Type), (eq A A).
+Proof.
+    intros.
+    exact (tz4_7_1 A).
+Qed.
+
+Theorem tz4_7_2 : forall (A B : Type), (impl (eq A B) (eq B A)).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (impl (bi (el x A) (el x B)) (bi (el x B) (el x A)))).
+    intros.
+    exact (bi_comm (el x A) (el x B)).
+    pose (S2 := (ax_gen S1)).
+    exact (quant_impli S2).
+Qed.
+
+Theorem eq_sym : forall (A B : Type), (impl (eq A B) (eq B A)).
+Proof.
+    intros.
+    exact (tz4_7_2 A B).
+Qed.
+
+Theorem eq_symi : forall {A B : Type} (H : (eq A B)), (eq B A).
+Proof.
+    intros.
+    exact (mp H (eq_sym A B)).
+Qed.
+
+Theorem eq_symd : forall {A B : Type} {p : Prop} (H : (impl p (eq A B))), (impl p (eq B A)).
+Proof.
+    intros.
+    exact (syll H (eq_sym A B)).
+Qed.
+
+Theorem tz4_7_3 : forall (A B C : Type), (impl (and (eq A B) (eq B C)) (eq A C)).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (impl (and (bi (el x A) (el x B)) (bi (el x B) (el x C))) (bi (el x A) (el x C)))).
+    intros.
+    exact (bi_trans (el x A) (el x B) (el x C)).
+    pose (S2 := (ax_gen S1)).
+    pose (S3 := (quant_impli S2)).
+    exact (impl_subli (gen_and (fun (x : Type) => (bi (el x A) (el x B))) (fun (x : Type) => (bi (el x B) (el x C)))) S3).
+Qed.
+
+Theorem eq_trans : forall (A B C : Type), (impl (and (eq A B) (eq B C)) (eq A C)).
+Proof.
+    intros.
+    exact (tz4_7_3 A B C).
+Qed.
+
+Theorem eq_transi : forall {A B C : Type} (H0 : (eq A B)) (H1 : (eq B C)), (eq A C).
+Proof.
+    intros.
+    exact (mp (andi H0 H1) (eq_trans A B C)).
+Qed.
+
+Theorem eq_transd : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (eq B C))), (impl p (eq A C)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (eq_trans A B C)).
+Qed.
+
+Theorem eq_sublc : forall (A B C : Type), (impl (and (eq A B) (eq A C))) (eq B C).
+Proof.
+    intros.
+    pose (S1 := (eq_trans B A C)).
+    pose (S2 := (and_subl (eq_sym A B) (eq A C))).
+    exact (syll S2 S1).
+Qed.
+
+Theorem eq_subld : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (eq A C))), (impl p (eq B C)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (eq_sublc A B C)).
+Qed.
+
+Theorem eq_subl : forall {A B : Type} (H : (eq A B)) (C : Type), (impl (eq A C) (eq B C)).
+Proof.
+    intros.
+    pose (S1 := (impliri (eq A C) H)).
+    pose (S2 := (id (eq A C))).
+    exact (eq_subld S1 S2).
+Qed.
+
+Theorem eq_subli : forall {A B C : Type} (H0 : (eq A B)) (H1 : (eq A C)), (eq B C).
+Proof.
+    intros.
+    exact (mp H1 (eq_subl H0 C)).
+Qed.
+
+Theorem eq_subrc : forall (A B C : Type), (impl (and (eq A B) (eq C A)) (eq C B)).
+Proof.
+    intros.
+    pose (S1 := (eq_trans C A B)).
+    exact (syll (and_comm (eq A B) (eq C A)) S1).
+Qed.
+
+Theorem eq_subrd : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (eq C A))), (impl p (eq C B)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (eq_subrc A B C)).
+Qed.
+
+Theorem eq_subr : forall {A B : Type} (H : (eq A B)) (C : Type), (impl (eq C A) (eq C B)).
+Proof.
+    intros.
+    pose (S1 := (impliri (eq C A) H)).
+    pose (S2 := (id (eq C A))).
+    exact (eq_subrd S1 S2).
+Qed.
+
+Theorem eq_subri : forall {A B C : Type} (H0 : (eq A B)) (H1 : (eq C A)), (eq C B).
+Proof.
+    intros.
+    exact (mp H1 (eq_subr H0 C)).
+Qed.
+
+Axiom ax_ext : forall {x y z : Type} (Vx : (set x)) (Vy : (set y)) (Vz : (set z)), (impl (and (eq x y) (el x z)) (el y z)).
+
+Theorem tz3_3 : forall {x y z : Type} (Vx : (set x)) (Vy : (set y)) (Vz : (set z)), (impl (eq x y) (bi (el x z) (el y z))).
+Proof.
+    intros.
+    pose (S1 := (expi (ax_ext Vx Vy Vz))).
+    pose (S2 := (expi (ax_ext Vy Vx Vz))).
+    pose (S3 := (syll (eq_sym x y) S2)).
+    exact (andd S1 S3).
+Qed.
+
+Theorem just_ax_clel : forall {x y : Type} (Vx : (set x)) (Vy : (set y)), (bi (el x y) (ex (fun (z : Type) => (and (eq z x) (el z y))))).
+Proof.
+    intros.
+    pose (S1 := (eq_refl x)).
+    pose (S2 := (impliri (el x y) S1)).
+    pose (S3 := (id (el x y))).
+    pose (S4 := (andd S2 S3)).
+    pose (S5 := (exid Vx (fun (z : Type) => (and (eq z x) (el z y))) S4)).
+    assert (S6 : forall (z : Type) (Vz : (set z)), (impl (and (eq z x) (el z y)) (el x y))).
+    intros.
+    exact (ax_ext Vz Vx Vy).
+    pose (S7 := (ax_gen S6)).
+    pose (S8 := (id (ex (fun (z : Type) => (and (eq z x) (el z y)))))).
+    pose (S9 := (impliri (ex (fun (z : Type) => (and (eq z x) (el z y)))) S7)).
+    pose (S10 := (exed S9 S8)).
+    exact (andi S5 S10).
+Qed.
+
+Axiom Clab : forall (P : forall (x : Type), Prop), Type.
+Axiom ax_clab : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (bi (el x (Clab P)) (P x)).
+Axiom ax_clel : forall (A B : Type), (bi (el A B) (ex (fun (x : Type) => (and (eq x A) (el x B))))).
+
+Theorem clele : forall (A B : Type), (impl (el A B) (ex (fun (x : Type) => (and (eq x A) (el x B))))).
+Proof.
+    intros.
+    exact (andeli (ax_clel A B)).
+Qed.
+
+Theorem clelei : forall {A B : Type} (H : (el A B)), (ex (fun (x : Type) => (and (eq x A) (el x B)))).
+Proof.
+    intros.
+    exact (mp H (clele A B)).
+Qed.
+
+Theorem cleled : forall {A B : Type} {p : Prop} (H : (impl p (el A B))), (impl p (ex (fun (x : Type) => (and (eq x A) (el x B))))).
+Proof.
+    intros.
+    exact (syll H (clele A B)).
+Qed.
+
+Theorem cleli : forall (A B : Type), (impl (ex (fun (x : Type) => (and (eq x A) (el x B)))) (el A B)).
+Proof.
+    intros.
+    exact (anderi (ax_clel A B)).
+Qed.
+
+Theorem clelii : forall {A B : Type} (H : (ex (fun (x : Type) => (and (eq x A) (el x B))))), (el A B).
+Proof.
+    intros.
+    exact (mp H (cleli A B)).
+Qed.
+
+Theorem clelid : forall {A B : Type} {p : Prop} (H : (impl p (ex (fun (x : Type) => (and (eq x A) (el x B)))))), (impl p (el A B)).
+Proof.
+    intros.
+    exact (syll H (cleli A B)).
+Qed.
+
+Theorem clabe : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (el x (Clab P)) (P x)).
+Proof.
+    intros.
+    exact (andeli (ax_clab Vx P)).
+Qed.
+
+Theorem clabei : forall {x : Type} (Vx : (set x)) {P : forall (y : Type), Prop} (H : (el x (Clab P))), (P x).
+Proof.
+    intros.
+    exact (mp H (clabe Vx P)).
+Qed.
+
+Theorem clabed : forall {x : Type} {p : Prop} (Vx : (set x)) {Q : forall (y : Type), Prop} (H : (impl p (el x (Clab Q)))), (impl p (Q x)).
+Proof.
+    intros.
+    exact (syll H (clabe Vx Q)).
+Qed.
+
+Theorem clabi : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop), (impl (P x) (el x (Clab P))).
+Proof.
+    intros.
+    exact (anderi (ax_clab Vx P)).
+Qed.
+
+Theorem clabii : forall {x : Type} (Vx : (set x)) (P : forall (y : Type), Prop) (H : (P x)), (el x (Clab P)).
+Proof.
+    intros.
+    exact (mp H (clabi Vx P)).
+Qed.
+
+Theorem clabid : forall {x : Type} {p : Prop} (Vx : (set x)) (Q : forall (y : Type), Prop) (H : (impl p (Q x))), (impl p (el x (Clab Q))).
+Proof.
+    intros.
+    exact (syll H (clabi Vx Q)).
+Qed.
+
+Theorem el_subrc : forall (A B C : Type), (impl (and (eq A B) (el C A)) (el C B)).
+Proof.
+    intros.
+    pose (S1 := (id (and (eq A B) (el C A)))).
+    pose (S2 := (andeld S1)).
+    pose (S3 := (anderd S1)).
+    pose (S4 := (cleled S3)).
+    assert (S5 : forall (x : Type) (Vx : (set x)), (impl (and (eq A B) (el C A)) (impl (and (eq x C) (el x A)) (and (eq x C) (el x B))))).
+    intros.
+    pose (S5 := (ax_specd Vx S2)).
+    pose (S6 := (andeld S5)).
+    pose (S7 := (and_subrc (el x A) (el x B) (eq x C))).
+    pose (S8 := (expi S7)).
+    exact (syll S6 S8).
+    pose (S6 := (ax_gen S5)).
+    pose (S7 := (ax_quant_impli S6)).
+    pose (S8 := (ex_subd S7 S4)).
+    exact (clelid S8).
+Qed.
+
+Theorem el_subrd : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (el C A))), (impl p (el C B)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (el_subrc A B C)).
+Qed.
+
+Theorem el_subr : forall {A B : Type} (H : (eq A B)) (C : Type), (impl (el C A) (el C B)).
+Proof.
+    intros.
+    pose (S1 := (impliri (el C A) H)).
+    pose (S2 := (id (el C A))).
+    exact (el_subrd S1 S2).
+Qed.
+
+Theorem el_subri : forall {A B C : Type} (H0 : (eq A B)) (H1 : (el C A)), (el C B).
+Proof.
+    intros.
+    exact (mp H1 (el_subr H0 C)).
+Qed.
+
+Theorem el_sublc : forall (A B C : Type), (impl (and (eq A B) (el A C)) (el B C)).
+Proof.
+    intros.
+    pose (S1 := (id (and (eq A B) (el A C)))).
+    pose (S2 := (andeld S1)).
+    pose (S3 := (anderd S1)).
+    pose (S4 := (cleled S3)).
+    assert (S5 : forall (x : Type) (Vx : (set x)), (impl (and (eq A B) (el A C)) (impl (and (eq x A) (el x C)) (and (eq x B) (el x C))))).
+    intros.
+    pose (S5 := (eq_subrc A B x)).
+    pose (S6 := (expi S5)).
+    pose (S7 := (and_sublc (eq x A) (eq x B) (el x C))).
+    pose (S8 := (expi S7)).
+    pose (S9 := (syll S6 S8)).
+    exact (syll S2 S9).
+    pose (S6 := (ax_gen S5)).
+    pose (S7 := (ax_quant_impli S6)).
+    pose (S8 := (ex_subd S7 S4)).
+    exact (clelid S8).
+Qed.
+
+Theorem el_subld : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (el A C))), (impl p (el B C)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (el_sublc A B C)).
+Qed.
+
+Theorem el_subl : forall {A B : Type} (H : (eq A B)) (C : Type), (impl (el A C) (el B C)).
+Proof.
+    intros.
+    pose (S1 := (impliri (el A C) H)).
+    pose (S2 := (id (el A C))).
+    exact (el_subld S1 S2).
+Qed.
+
+Theorem el_subli : forall {A B C : Type} (H0 : (eq A B)) (H1 : (el A C)), (el B C).
+Proof.
+    intros.
+    exact (mp H1 (el_subl H0 C)).
+Qed.
+
+Theorem clab_subc : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (bi (P x) (Q x)))) (eq (Clab P) (Clab Q))).
+Proof.
+    intros.
+    assert (S1 : (forall (x : Type) (Vx : (set x)), (impl (all (fun (y : Type) => (bi (P y) (Q y)))) (bi (el x (Clab P)) (el x (Clab Q)))))).
+    intros.
+    pose (S1 := (id (all (fun (y : Type) => (bi (P y) (Q y)))))).
+    pose (S2 := (ax_specd Vx S1)).
+    pose (S3 := (andeld S2)).
+    pose (S4 := (ax_clab Vx P)).
+    pose (S5 := (andeli S4)).
+    pose (S6 := (impliri (all (fun (y : Type) => (bi (P y) (Q y)))) S5)).
+    pose (S7 := (impl_subld S6 S3)).
+    pose (S8 := (ax_clab Vx Q)).
+    pose (S9 := (anderi S8)).
+    pose (S10 := (impliri (all (fun (y : Type) => (bi (P y) (Q y)))) S9)).
+    pose (S11 := (impl_subrd S10 S7)).
+    pose (S12 := (anderd S2)).
+    pose (S13 := (anderi S4)).
+    pose (S14 := (impliri (all (fun (y : Type) => (bi (P y) (Q y)))) S13)).
+    pose (S15 := (impl_subrd S14 S12)).
+    pose (S16 := (andeli S8)).
+    pose (S17 := (impliri (all (fun (y : Type) => (bi (P y) (Q y)))) S16)).
+    pose (S18 := (impl_subld S17 S15)).
+    exact (andd S11 S18).
+    pose (S2 := (ax_gen S1)).
+    exact (ax_quant_impli S2).
+Qed.
+
+Theorem clab_sub : forall {P Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (bi (P x) (Q x))))), (eq (Clab P) (Clab Q)).
+Proof.
+    intros.
+    exact (mp H (clab_subc P Q)).
+Qed.
+
+Theorem clab_subd : forall {p : Prop} {Q R : forall (x : Type), Prop} (H : (impl p (all (fun (x : Type) => (bi (Q x) (R x)))))), (impl p (eq (Clab Q) (Clab R))).
+Proof.
+    intros.
+    exact (syll H (clab_subc Q R)).
+Qed.
+
+Theorem tz3_4  : forall {x y : Type} (Vx : (set x)) (Vy : (set y)) (P : forall (x : Type), Prop), (impl (eq x y) (bi (P x) (P y))).
+Proof.
+    intros.
+    pose (S1 := (el_sublc x y (Clab P))).
+    pose (S2 := (expi S1)).
+    pose (S3 := (el_sublc y x (Clab P))).
+    pose (S4 := (expi S3)).
+    pose (S5 := (syll (eq_sym x y) S4)).
+    pose (S6 := (ax_clab Vx P)).
+    pose (S7 := (impliri (eq x y) (andeli S6))).
+    pose (S8 := (impl_subld S5 S7)).
+    pose (S9 := (impliri (eq x y) (anderi S6))).
+    pose (S10 := (impl_subld S9 S2)).
+    pose (S11 := (ax_clab Vy P)).
+    pose (S12 := (impliri (eq x y) (andeli S11))).
+    pose (S13 := (impl_subrd S12 S10)).
+    pose (S14 := (impliri (eq x y) (anderi S11))).
+    pose (S15 := (impl_subld S14 S8)).
+    exact (andd S13 S15).
+Qed.
+
+Theorem pred_ext : forall {x y : Type} (Vx : (set x)) (Vy : (set y)) (P : forall (x : Type), Prop), (impl (eq x y) (bi (P x) (P y))).
+Proof.
+    intros.
+    exact (tz3_4 Vx Vy P).
+Qed.
+
+Theorem tz4_9 : forall {x : Type} (Vx : (set x)), (eq x (Clab (fun (y : Type) => (el y x)))).
+Proof.
+    intros.
+    assert (S1 : forall (y : Type) (Vy : (set y)), (bi (el y x) (el y (Clab (fun (z : Type) => (el z x)))))).
+    intros.
+    pose (S1 := (ax_clab Vy (fun (z : Type) => (el z x)))).
+    exact (bi_commi S1).
+    exact (ax_gen S1).
+Qed.
+
+Definition isset := fun (A : Type) => (ex (fun (x : Type) => (eq x A))).
+Definition cls := fun (A : Type) => (not (isset A)).
+
+Theorem isset_subc : forall (A B : Type), (impl (and (eq A B) (isset A)) (isset B)).
+Proof.
+    intros.
+    assert (S1 : forall (x : Type) (Vx : (set x)), (impl (eq A B) (impl (eq x A) (eq x B)))).
+    intros.
+    exact (expi (eq_subrc A B x)).
+    pose (S2 := (ax_gen S1)).
+    pose (S3 := (ax_quant_impli S2)).
+    pose (S4 := (ex_subc (fun (x : Type) => (eq x A)) (fun (x : Type) => (eq x B)))).
+    pose (S5 := (expi S4)).
+    pose (S6 := (syll S3 S5)).
+    exact (impi S6).
+Qed.
+
+Theorem isset_sub : forall {A B : Type} (H : (eq A B)), (impl (isset A) (isset B)).
+Proof.
+    intros.
+    pose (S1 := (isset_subc A B)).
+    pose (S2 := (expi S1)).
+    exact (mp H S2).
+Qed.
+
+Theorem isset_subi : forall {A B : Type} (H0 : (eq A B)) (H1 : (isset A)), (isset B).
+Proof.
+    intros.
+    exact (mp H1 (isset_sub H0)).
+Qed.
+
+Theorem isset_subd : forall {A B : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (isset A))), (impl p (isset B)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (isset_subc A B)).
+Qed.
+
+Theorem cls_subc : forall (A B : Type), (impl (and (eq A B) (cls A)) (cls B)).
+Proof.
+    intros.
+    pose (S1 := (not_subc (isset A) (isset B))).
+    pose (S2 := (expi S1)).
+    pose (S3 := (isset_subc B A)).
+    pose (S4 := (expi S3)).
+    pose (S5 := (syll S4 S2)).
+    pose (S6 := (syll (eq_sym A B) S5)).
+    exact (impi S6).
+Qed.
+
+Theorem cls_sub : forall {A B : Type} (H : (eq A B)), (impl (cls A) (cls B)).
+Proof.
+    intros.
+    exact (mp H (expi (cls_subc A B))).
+Qed.
+
+Theorem cls_subi : forall {A B : Type} (H0 : (eq A B)) (H1 : (cls A)), (cls B).
+Proof.
+    intros.
+    exact (mp H1 (cls_sub H0)).
+Qed.
+
+Theorem cls_subd : forall {A B : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (cls A))), (impl p (cls B)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (cls_subc A B)).
+Qed.
+
+Theorem tz4_11 : forall {x : Type} (Vx : (set x)), (isset x).
+Proof.
+    intros.
+    pose (S1 := (eq_refl x)).
+    exact (exii Vx (fun (y : Type) => (eq y x)) S1).
+Qed.
+
+Definition nel := fun (x y : Type) => (not (el x y)).
+
+Theorem nel_subrc : forall (A B C : Type), (impl (and (eq A B) (nel C A)) (nel C B)).
+Proof.
+    intros.
+    pose (S1 := (el_subrc B A C)).
+    pose (S2 := (expi S1)).
+    pose (S3 := (not_subc (el C A) (el C B))).
+    pose (S4 := (expi S3)).
+    pose (S5 := (syll S2 S4)).
+    pose (S6 := (syll (eq_sym A B) S5)).
+    exact (impi S6).
+Qed.
+
+Theorem nel_subrd : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (nel C A))), (impl p (nel C B)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (nel_subrc A B C)).
+Qed.
+
+Theorem nel_subr : forall {A B : Type} (H : (eq A B)) (C : Type), (impl (nel C A) (nel C B)).
+Proof.
+    intros.
+    pose (S1 := (impliri (nel C A) H)).
+    pose (S2 := (id (nel C A))).
+    exact (nel_subrd S1 S2).
+Qed.
+
+Theorem nel_subri : forall {A B C : Type} (H0 : (eq A B)) (H1 : (nel C A)), (nel C B).
+Proof.
+    intros.
+    exact (mp H1 (nel_subr H0 C)).
+Qed.
+
+Theorem nel_sublc : forall (A B C : Type), (impl (and (eq A B) (nel A C)) (nel B C)).
+Proof.
+    intros.
+    pose (S1 := (el_sublc B A C)).
+    pose (S2 := (expi S1)).
+    pose (S3 := (not_subc (el A C) (el B C))).
+    pose (S4 := (expi S3)).
+    pose (S5 := (syll S2 S4)).
+    pose (S6 := (syll (eq_sym A B) S5)).
+    exact (impi S6).
+Qed.
+
+Theorem nel_subld : forall {A B C : Type} {p : Prop} (H0 : (impl p (eq A B))) (H1 : (impl p (nel A C))), (impl p (nel B C)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (nel_sublc A B C)).
+Qed.
+
+Theorem nel_subl : forall {A B : Type} (H : (eq A B)) (C : Type), (impl (nel A C) (nel B C)).
+Proof.
+    intros.
+    pose (S1 := (impliri (nel A C) H)).
+    pose (S2 := (id (nel A C))).
+    exact (nel_subld S1 S2).
+Qed.
+
+Theorem nel_subli : forall {A B C : Type} (H0 : (eq A B)) (H1 : (nel A C)), (nel B C).
+Proof.
+    intros.
+    exact (mp H1 (nel_subl H0 C)).
+Qed.
+
+Definition Ru_P := fun (x : Type) => (nel x x).
+Definition Ru := (Clab Ru_P).
+
+Theorem tz4_14 : (cls Ru).
+Proof.
+    intros.
+    pose (S1 := (id (el Ru Ru))).
+    pose (S2 := (cleled S1)).
+    assert (S3 : forall (x : Type) (Vx : (set x)), (impl (and (eq x Ru) (el x Ru)) (nel Ru Ru))).
+    intros.
+    pose (S3 := (id (and (eq x Ru) (el x Ru)))).
+    pose (S4 := (anderd S3)).
+    pose (S5 := (clabed Vx S4)).
+    pose (S6 := (andeld S3)).
+    pose (S7 := (nel_subld S6 S5)).
+    exact (nel_subrd S6 S7).
+    pose (S4 := (ax_gen S3)).
+    pose (S5 := (impliri (el Ru Ru) S4)).
+    pose (S6 := (exed S5 S2)).
+    pose (S7 := (noted S1 S6) false).
+    assert (S8 : forall (x : Type) (Vx : (set x)), (impl (eq x Ru) (impl (nel Ru Ru) (el Ru Ru)))).
+    intros.
+    pose (S8 := (id (and (eq x Ru) (nel Ru Ru)))).
+    pose (S9 := (andeld S8)).
+    pose (S10 := (eq_symd S9)).
+    pose (S11 := (anderd S8)).
+    pose (S12 := (nel_subld S10 S11)).
+    pose (S13 := (nel_subrd S10 S12)).
+    pose (S14 := (clabid Vx Ru_P S13)).
+    pose (S15 := (el_subld S9 S14)).
+    exact (expi S15).
+    pose (S9 := (ax_gen S8)).
+    pose (S10 := (impliri (isset Ru) S9)).
+    pose (S11 := (id (isset Ru))).
+    pose (S12 := (exed S10 S11)).
+    pose (S13 := (impliri (isset Ru) S7)).
+    pose (S14 := (sylld S12 S13)).
+    pose (S15 := (ex_mid (el Ru Ru))).
+    pose (S16 := (impliri (isset Ru) S15)).
+    pose (S17 := (ored S16 S13 S14)).
+    exact (notii S17).
+Qed.
