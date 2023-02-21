@@ -3615,3 +3615,42 @@ Proof.
     pose (S17 := (ored S16 S13 S14)).
     exact (notii S17).
 Qed.
+
+Definition pair_P := fun (A B x : Type) => (or (el x A) (el x B)).
+Definition pair := fun (A B : Type) => (Clab (pair_P A B)).
+Definition singleton_P := fun (A x : Type) => (pair_P A A).
+Definition singleton := fun (A : Type) => (pair A A).
+
+Definition opair_P := fun (A B x : Type) => (or (eq x (singleton A)) (eq x (pair A B))).
+Definition opair := fun (A B : Type) => (Clab (opair_P A B)).
+
+Definition subset := fun (A B : Type) => (all (fun (x : Type) => (impl (el x A) (el x B)))).
+
+Definition V_P := fun (x : Type) => (eq x x).
+Definition V := (Clab V_P).
+
+Definition setprod_P := fun (A B x : Type) => (ex (fun (y : Type) => (and (el y A) (ex (fun (z : Type) => (and (el z B) (eq x (opair A B)))))))).
+Definition setprod := fun (A B : Type) => (Clab (setprod_P A B)).
+
+Definition OPairClab_P := fun (P : forall (x y : Type), Prop) => (fun (x : Type) => (ex (fun (y : Type) => (ex (fun (z : Type) => (and (eq x (opair y z)) (P x y))))))).
+Definition OPairClab := fun (P : forall (x y : Type), Prop) => (Clab (OPairClab_P P)).
+
+Definition conv_P := fun (A x y : Type) => (el (opair y x) A).
+Definition conv := fun (A : Type) => (OPairClab (conv_P A)).
+
+Definition isrel := fun (A : Type) => (subset A (setprod V V)).
+Definition issv := fun (A : Type) => (all (fun (x : Type) => (all (fun (y : Type) => (all (fun (z : Type) => (impl (and (el (opair x y) A) (el (opair x z) A)) (eq y z)))))))).
+Definition is1to1 := fun (A : Type) => (and (issv A) (issv (conv A))).
+Definition is1to1func := fun (A : Type) => (and (isrel A) (is1to1 A)).
+
+Definition dom_P := fun (A x : Type) => (ex (fun (y : Type) => (el (opair x y) A))).
+Definition dom := fun (A : Type) => (Clab (dom_P A)).
+Definition ran_P := fun (A x : Type) => (ex (fun (y : Type) => (el (opair y x) A))).
+Definition ran := fun (A : Type) => (Clab (ran_P A)).
+
+Definition is1to1funcon := fun (A B : Type) => (and (is1to1func A) (eq (dom A) B)).
+Definition maps1to1onto := fun (F A B : Type) => (and (is1to1funcon F A) (eq (ran F) B)).
+
+Definition equinum := fun (A B : Type) => (ex (fun (x : Type) => (maps1to1onto x A B))).
+
+Axiom ax_univ : (all (fun (x : Type) => (ex (fun (y : Type) => (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (subset w z) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (subset v z) (el v w)))))))))))) (all (fun (z : Type) => (impl (subset z y) (or (equinum z y) (el z y)))))))))).
