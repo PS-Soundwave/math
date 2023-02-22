@@ -2647,6 +2647,30 @@ Proof.
     exact (syll H (quant_impl Q R)).
 Qed.
 
+Theorem all_subc : forall (P Q : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (impl (P x) (Q x)))) (all P)) (all Q)).
+Proof.
+    intros.
+    exact (impi (quant_impl P Q)).
+Qed.
+
+Theorem all_subd : forall {p : Prop} {Q R : forall (x : Type), Prop} (H0 : (impl p (all (fun (x : Type) => (impl (Q x) (R x)))))) (H1 : (impl p (all Q))), (impl p (all R)).
+Proof.
+    intros.
+    exact (syll (andd H0 H1) (all_subc Q R)).
+Qed.
+
+Theorem all_sub : forall {P Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (impl (P x) (Q x))))), (impl (all P) (all Q)).
+Proof.
+    intros.
+    exact (mp H (quant_impl P Q)).
+Qed.
+
+Theorem all_subi : forall {P Q : forall (x : Type), Prop} (H0 : (all (fun (x : Type) => (impl (P x) (Q x))))) (H1 : (all P)), (all Q).
+Proof.
+    intros.
+    exact (mp H1 (all_sub H0)).
+Qed.
+
 Theorem pm10_28 : forall (P Q : forall (x : Type), Prop), (impl (all (fun (x : Type) => (impl (P x) (Q x)))) (impl (ex P) (ex Q))).
 Proof.
 Admitted.
@@ -2781,7 +2805,7 @@ Theorem pm10_52 : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (ex Q) 
 Proof.
 Admitted.
 
-Theorem exe : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (impl (Q x) p))) (ex Q)) p).
+Theorem exec : forall (p : Prop) (Q : forall (x : Type), Prop), (impl (and (all (fun (x : Type) => (impl (Q x) p))) (ex Q)) p).
 Proof.
     intros.
     pose (S1 := (pm10_52 p Q)).
@@ -2790,16 +2814,22 @@ Proof.
     exact (syll (and_comm (all (fun (x : Type) => (impl (Q x) p))) (ex Q)) S3).
 Qed.
 
+Theorem exe : forall {p : Prop} {Q : forall (x : Type), Prop} (H : (all (fun (x : Type) => (impl (Q x) p)))), (impl (ex Q) p).
+Proof.
+    intros.
+    exact (mp H (expi (exec p Q))).
+Qed.
+
 Theorem exed : forall {p q : Prop} {R : forall (x : Type), Prop} (H0 : (impl p (all (fun (x : Type) => (impl (R x) q))))) (H1 : (impl p (ex R))), (impl p q).
 Proof.
     intros.
-    exact (syll (andd H0 H1) (exe q R)).
+    exact (syll (andd H0 H1) (exec q R)).
 Qed.
 
 Theorem exei : forall {p : Prop} {Q : forall (x : Type), Prop} (H0 : (all (fun (x : Type) => (impl (Q x) p)))) (H1 : (ex Q)), p.
 Proof.
     intros.
-    exact (mp (andi H0 H1) (exe p Q)).
+    exact (mp (andi H0 H1) (exec p Q)).
 Qed.
 
 Theorem pm10_53 : forall (P Q : forall (x : Type), Prop), (impl (not (ex P)) (gimpl P Q)).
@@ -3065,7 +3095,7 @@ Proof.
     intros.
     exact (bi_comm (el x A) (el x B)).
     pose (S2 := (ax_gen S1)).
-    exact (quant_impli S2).
+    exact (all_sub S2).
 Qed.
 
 Theorem eq_sym : forall (A B : Type), (impl (eq A B) (eq B A)).
@@ -3093,7 +3123,7 @@ Proof.
     intros.
     exact (bi_trans (el x A) (el x B) (el x C)).
     pose (S2 := (ax_gen S1)).
-    pose (S3 := (quant_impli S2)).
+    pose (S3 := (all_sub S2)).
     exact (impl_subli (gen_and (fun (x : Type) => (bi (el x A) (el x B))) (fun (x : Type) => (bi (el x B) (el x C)))) S3).
 Qed.
 
@@ -3654,3 +3684,58 @@ Definition maps1to1onto := fun (F A B : Type) => (and (is1to1funcon F A) (eq (ra
 Definition equinum := fun (A B : Type) => (ex (fun (x : Type) => (maps1to1onto x A B))).
 
 Axiom ax_univ : (all (fun (x : Type) => (ex (fun (y : Type) => (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (subset w z) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (subset v z) (el v w)))))))))))) (all (fun (z : Type) => (impl (subset z y) (or (equinum z y) (el z y)))))))))).
+Axiom ax_rep : forall (P : forall (x y : Type), Prop), (all (fun (x : Type) => (impl (all (fun (y : Type) => (ex (fun (z : Type) => (all (fun (w : Type) => (impl (P y w) (eq w z)))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (P w z)))))))))))).
+
+Theorem ax_sep : forall (P : forall (x : Type), Prop), (all (fun (x : Type) => (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (and (el z x) (P z))))))))).
+Proof.
+    intros.
+    pose (S1 := (ax_rep (fun (x y : Type) => (and (eq x y) (P y))))).
+    enough (S2 : forall (x : Type) (Vx : (set x)), (impl (impl (all (fun (y : Type) => (ex (fun (z : Type) => (all (fun (w : Type) => (impl (and (eq y w) (P w)) (eq w z)))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (and (eq w z) (P z))))))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (and (el z x) (P z))))))))).
+    pose (S3 := (ax_gen S2)).
+    exact (all_subi S3 S1).
+    intros.
+    enough (S2 : (all (fun (y : Type) => (ex (fun (z : Type) => (all (fun (w : Type) => (impl (and (eq y w) (P w)) (eq w z))))))))).
+    pose (S3 := (id (impl (all (fun (y : Type) => (ex (fun (z : Type) => (all (fun (w : Type) => (impl (and (eq y w) (P w)) (eq w z)))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (and (eq w z) (P z))))))))))))).
+    pose (S4 := (impliri (impl (all (fun (y : Type) => (ex (fun (z : Type) => (all (fun (w : Type) => (impl (and (eq y w) (P w)) (eq w z)))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (and (eq w z) (P z))))))))))) S2)).
+    pose (S5 := (mpd S4 S3)).
+    enough (S6 : (impl (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (and (eq w z) (P z)))))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (and (el z x) (P z))))))))).
+    exact (syll S5 S6).
+    enough (S6 : forall (y : Type) (Vy : (set y)), (impl (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (and (eq w z) (P z)))))))) (all (fun (z : Type) => (bi (el z y) (and (el z x) (P z))))))).
+    pose (S7 := (ax_gen S6)).
+    exact (ex_sub S7).
+    intros.
+    enough (S6 : forall (z : Type) (Vz : (set z)), (impl (bi (el z y) (ex (fun (w : Type) => (and (el w x) (and (eq w z) (P z)))))) (bi (el z y) (and (el z x) (P z))))).
+    pose (S7 := (ax_gen S6)).
+    exact (all_sub S7).
+    intros.
+    enough (S6 : forall (w : Type) (Vw : (set w)), (impl (and (el w x) (and (eq w z) (P z))) (and (el z x) (P z)))).
+    pose (S7 := (ax_gen S6)).
+    pose (S8 := (exe S7)).
+    pose (S9 := (id (and (el z x) (P z)))).
+    pose (S10 := (ander (el z x) (P z))).
+    pose (S11 := (impliri (and (el z x) (P z)) (eq_refl z))).
+    pose (S12 := (andd S11 S10)).
+    pose (S13 := (andel (el z x) (P z))).
+    pose (S14 := (andd S13 S12)).
+    pose (S15 := (exid Vz (fun (w : Type) => (and (el w x) (and (eq w z) (P z)))) S14)).
+    pose (S16 := (andi S8 S15)).
+    exact (bi_subr S16 (el z y)).
+    intros.
+    pose (S6 := (id (and (el w x) (and (eq w z) (P z))))).
+    pose (S7 := (andeld S6)).
+    pose (S8 := (anderd S6)).
+    pose (S9 := (andeld S8)).
+    pose (S10 := (anderd S8)).
+    pose (S11 := (el_subld S9 S7)).
+    exact (andd S11 S10).
+    assert (S2 : forall (y : Type) (Vy : (set y)), (ex (fun (z : Type) => (all (fun (w : Type) => (impl (and (eq y w) (P w)) (eq w z))))))).
+    intros.
+    assert (S3 : forall (w : Type) (Vw : (set w)), (impl (and (eq y w) (P w)) (eq w y))).
+    intros.
+    pose (S2 := (id (and (eq y w) (P w)))).
+    pose (S3 := (andeld S2)).
+    exact (eq_symd S3).
+    pose (S4 := (ax_gen S3)).
+    exact (exii Vy (fun (z : Type) => (all (fun (w : Type) => (impl (and (eq y w) (P w)) (eq w z))))) S4).
+    exact (ax_gen S2).
+Qed.
