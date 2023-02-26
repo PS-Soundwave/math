@@ -3687,44 +3687,12 @@ Proof.
     exact (notii S17).
 Qed.
 
-Definition pair_P := fun (A B x : Type) => (or (el x A) (el x B)).
+Definition pair_P := fun (A B x : Type) => (or (eq x A) (eq x B)).
 Definition pair := fun (A B : Type) => (Clab (pair_P A B)).
 Definition singleton_P := fun (A x : Type) => (pair_P A A).
 Definition singleton := fun (A : Type) => (pair A A).
 
-Definition opair_P := fun (A B x : Type) => (or (eq x (singleton A)) (eq x (pair A B))).
-Definition opair := fun (A B : Type) => (Clab (opair_P A B)).
-
-Definition subset := fun (A B : Type) => (all (fun (x : Type) => (impl (el x A) (el x B)))).
-
-Definition V_P := fun (x : Type) => (eq x x).
-Definition V := (Clab V_P).
-
-Definition setprod_P := fun (A B x : Type) => (ex (fun (y : Type) => (and (el y A) (ex (fun (z : Type) => (and (el z B) (eq x (opair A B)))))))).
-Definition setprod := fun (A B : Type) => (Clab (setprod_P A B)).
-
-Definition OPairClab_P := fun (P : forall (x y : Type), Prop) => (fun (x : Type) => (ex (fun (y : Type) => (ex (fun (z : Type) => (and (eq x (opair y z)) (P x y))))))).
-Definition OPairClab := fun (P : forall (x y : Type), Prop) => (Clab (OPairClab_P P)).
-
-Definition conv_P := fun (A x y : Type) => (el (opair y x) A).
-Definition conv := fun (A : Type) => (OPairClab (conv_P A)).
-
-Definition isrel := fun (A : Type) => (subset A (setprod V V)).
-Definition issv := fun (A : Type) => (all (fun (x : Type) => (all (fun (y : Type) => (all (fun (z : Type) => (impl (and (el (opair x y) A) (el (opair x z) A)) (eq y z)))))))).
-Definition is1to1 := fun (A : Type) => (and (issv A) (issv (conv A))).
-Definition is1to1func := fun (A : Type) => (and (isrel A) (is1to1 A)).
-
-Definition dom_P := fun (A x : Type) => (ex (fun (y : Type) => (el (opair x y) A))).
-Definition dom := fun (A : Type) => (Clab (dom_P A)).
-Definition ran_P := fun (A x : Type) => (ex (fun (y : Type) => (el (opair y x) A))).
-Definition ran := fun (A : Type) => (Clab (ran_P A)).
-
-Definition is1to1funcon := fun (A B : Type) => (and (is1to1func A) (eq (dom A) B)).
-Definition maps1to1onto := fun (F A B : Type) => (and (is1to1funcon F A) (eq (ran F) B)).
-
-Definition equinum := fun (A B : Type) => (ex (fun (x : Type) => (maps1to1onto x A B))).
-
-Axiom ax_univ : (all (fun (x : Type) => (ex (fun (y : Type) => (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (subset w z) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (subset v z) (el v w)))))))))))) (all (fun (z : Type) => (impl (subset z y) (or (equinum z y) (el z y)))))))))).
+Axiom ax_univ : (all (fun (x : Type) => (ex (fun (y : Type) => (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (all (fun (v : Type) => (impl (el v w) (el v z)))) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u z)))) (el v w)))))))))))) (all (fun (z : Type) => (impl (all (fun (w : Type) => (impl (el w z) (el w y)))) (or (ex (fun (w : Type) => (and (and (and (all (fun (v : Type) => (impl (el v w) (ex (fun (u : Type) => (ex (fun (t : Type) => (all (fun (s : Type) => (bi (el s v) (or (all (fun (r : Type) => (bi (el r s) (eq r u)))) (all (fun (r : Type) => (bi (el r s) (or (eq r u) (eq r t)))))))))))))))) (and (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q u))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q t))))))))) (el s w))))) (eq u t)))))))) (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q u)))) (all (fun (q : Type) => (bi (el q r) (or (eq q u) (eq q v))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q t)))) (all (fun (q : Type) => (bi (el q r) (or (eq q t) (eq q v))))))))) (el s w))))) (eq u t)))))))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (r : Type) => (bi (el r s) (eq r v)))) (all (fun (r : Type) => (bi (el r s) (or (eq r v) (eq r u))))))))) (el t w)))))) (el v z))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q u)))) (all (fun (q : Type) => (bi (el q s) (or (eq q u) (eq q v))))))))) (el t w)))))) (el v y))))))) (el z y)))))))))).
 Axiom ax_rep : forall (P : forall (x y : Type), Prop), (all (fun (x : Type) => (impl (all (fun (y : Type) => (ex (fun (z : Type) => (all (fun (w : Type) => (impl (P y w) (eq w z)))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (ex (fun (w : Type) => (and (el w x) (P w z)))))))))))).
 
 Theorem ax_sep : forall (P : forall (x : Type), Prop), (all (fun (x : Type) => (ex (fun (y : Type) => (all (fun (z : Type) => (bi (el z y) (and (el z x) (P z))))))))).
@@ -3781,6 +3749,51 @@ Proof.
     exact (ax_gen S2).
 Qed.
 
+Theorem sep_prune : forall (P : forall (x : Type), Prop), (impl (ex (fun (x : Type) => (all (fun (y : Type) => (impl (P y) (el y x)))))) (ex (fun (x : Type) => (all (fun (y : Type) => (bi (P y) (el y x))))))).
+Proof.
+    intros.
+    enough (S1 : forall (x : Type) (Vx : (set x)), (impl (all (fun (y : Type) => (impl (P y) (el y x)))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (P z) (el z y)))))))).
+    exact (exe (ax_gen S1)).
+    intros.
+    pose (S1 := (ax_speci Vx (ax_sep P))).
+    pose (S2 := (impliri (all (fun (y : Type) => (impl (P y) (el y x)))) S1)).
+    enough (S3 : forall (y : Type) (Vy : (set y)), (impl (all (fun (z : Type) => (impl (P z) (el z x)))) (impl (all (fun (z : Type) => (bi (el z y) (and (el z x) (P z))))) (all (fun (z : Type) => (bi (P z) (el z y))))))).
+    exact (ex_subd (ax_quant_impli (ax_gen S3)) S2).
+    intros.
+    assert (S3 : forall (z : Type) (Vz : (set z)), (impl (impl (P z) (el z x)) (impl (bi (el z y) (and (el z x) (P z))) (bi (P z) (el z y))))).
+    intros.
+    pose (S3 := (id (and (impl (P z) (el z x)) (bi (el z y) (and (el z x) (P z)))))).
+    pose (S4 := (anderd S3)).
+    pose (S5 := (andeld S4)).
+    pose (S6 := (impi S5)).
+    pose (S7 := (anderd S6)).
+    pose (S8 := (expi S7)).
+    pose (S9 := (anderd S4)).
+    pose (S10 := (andeld S3)).
+    pose (S11 := (impi S10)).
+    pose (S12 := (id (and (and (impl (P z) (el z x)) (bi (el z y) (and (el z x) (P z)))) (P z)))).
+    pose (S13 := (anderd S12)).
+    pose (S14 := (andd S11 S13)).
+    pose (S15 := (expi S14)).
+    pose (S16 := (sylld S15 S9)).
+    pose (S17 := (andd S16 S8)).
+    exact (expi S17).
+    pose (S4 := (quant_impli (ax_gen S3))).
+    exact (quant_impld S4).
+Qed.
+
+Theorem sep_prunei : forall {P : forall (x : Type), Prop} (H : (ex (fun (x : Type) => (all (fun (y : Type) => (impl (P y) (el y x))))))), (ex (fun (x : Type) => (all (fun (y : Type) => (bi (P y) (el y x)))))).
+Proof.
+    intros.
+    exact (mp H (sep_prune P)).
+Qed.
+
+Theorem sep_pruned : forall {p : Prop} {Q : forall (x : Type), Prop} (H : (impl p (ex (fun (x : Type) => (all (fun (y : Type) => (impl (Q y) (el y x)))))))), (impl p (ex (fun (x : Type) => (all (fun (y : Type) => (bi (Q y) (el y x))))))).
+Proof.
+    intros.
+    exact (syll H (sep_prune Q)).
+Qed.
+
 Theorem ax_nul : (ex (fun (x : Type) => (all (fun (y : Type) => (nel y x))))).
 Proof.
     pose (S1 := (ax_sep (fun (x : Type) => false))).
@@ -3800,4 +3813,30 @@ Proof.
     pose (S6 := (expi S5)).
     exact (notid S6).
     exact (all_sub (ax_gen S2)).
+Qed.
+
+Theorem ax_pow : (all (fun (x : Type) => (ex (fun (y : Type) => (all (fun (z : Type) => (bi (all (fun (w : Type) => (impl (el w z) (el w x)))) (el z y)))))))).
+Proof.
+    pose (S1 := ax_univ).
+    enough (S2 : forall (x : Type) (Vx : (set x)), (impl (ex (fun (y : Type) => (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (all (fun (v : Type) => (impl (el v w) (el v z)))) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u z)))) (el v w)))))))))))) (all (fun (z : Type) => (impl (all (fun (w : Type) => (impl (el w z) (el w y)))) (or (ex (fun (w : Type) => (and (and (and (all (fun (v : Type) => (impl (el v w) (ex (fun (u : Type) => (ex (fun (t : Type) => (all (fun (s : Type) => (bi (el s v) (or (all (fun (r : Type) => (bi (el r s) (eq r u)))) (all (fun (r : Type) => (bi (el r s) (or (eq r u) (eq r t)))))))))))))))) (and (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q u))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q t))))))))) (el s w))))) (eq u t)))))))) (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q u)))) (all (fun (q : Type) => (bi (el q r) (or (eq q u) (eq q v))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q t)))) (all (fun (q : Type) => (bi (el q r) (or (eq q t) (eq q v))))))))) (el s w))))) (eq u t)))))))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q v)))) (all (fun (q : Type) => (bi (el q s) (or (eq q v) (eq q u))))))))) (el t w)))))) (el v z))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q u)))) (all (fun (q : Type) => (bi (el q s) (or (eq q u) (eq q v))))))))) (el t w)))))) (el v y))))))) (el z y)))))))) (ex (fun (y : Type) => (all (fun (z : Type) => (bi (all (fun (w : Type) => (impl (el w z) (el w x)))) (el z y)))))))).
+    exact (all_subi (ax_gen S2) S1).
+    intros.
+    enough (S2 : forall (y : Type) (Vy : (set y)), (impl (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (all (fun (v : Type) => (impl (el v w) (el v z)))) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u z)))) (el v w)))))))))))) (all (fun (z : Type) => (impl (all (fun (w : Type) => (impl (el w z) (el w y)))) (or (ex (fun (w : Type) => (and (and (and (all (fun (v : Type) => (impl (el v w) (ex (fun (u : Type) => (ex (fun (t : Type) => (all (fun (s : Type) => (bi (el s v) (or (all (fun (r : Type) => (bi (el r s) (eq r u)))) (all (fun (r : Type) => (bi (el r s) (or (eq r u) (eq r t)))))))))))))))) (and (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q u))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q t))))))))) (el s w))))) (eq u t)))))))) (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q u)))) (all (fun (q : Type) => (bi (el q r) (or (eq q u) (eq q v))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q t)))) (all (fun (q : Type) => (bi (el q r) (or (eq q t) (eq q v))))))))) (el s w))))) (eq u t)))))))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q v)))) (all (fun (q : Type) => (bi (el q s) (or (eq q v) (eq q u))))))))) (el t w)))))) (el v z))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q u)))) (all (fun (q : Type) => (bi (el q s) (or (eq q u) (eq q v))))))))) (el t w)))))) (el v y))))))) (el z y)))))) (ex (fun (z : Type) => (all (fun (w : Type) => (bi (all (fun (v : Type) => (impl (el v w) (el v x)))) (el w z)))))))).
+    exact (exe (ax_gen S2)).
+    intros.
+    pose (S2 := (id (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (all (fun (v : Type) => (impl (el v w) (el v z)))) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u z)))) (el v w)))))))))))) (all (fun (z : Type) => (impl (all (fun (w : Type) => (impl (el w z) (el w y)))) (or (ex (fun (w : Type) => (and (and (and (all (fun (v : Type) => (impl (el v w) (ex (fun (u : Type) => (ex (fun (t : Type) => (all (fun (s : Type) => (bi (el s v) (or (all (fun (r : Type) => (bi (el r s) (eq r u)))) (all (fun (r : Type) => (bi (el r s) (or (eq r u) (eq r t)))))))))))))))) (and (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q u))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q t))))))))) (el s w))))) (eq u t)))))))) (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q u)))) (all (fun (q : Type) => (bi (el q r) (or (eq q u) (eq q v))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q t)))) (all (fun (q : Type) => (bi (el q r) (or (eq q t) (eq q v))))))))) (el s w))))) (eq u t)))))))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q v)))) (all (fun (q : Type) => (bi (el q s) (or (eq q v) (eq q u))))))))) (el t w)))))) (el v z))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q u)))) (all (fun (q : Type) => (bi (el q s) (or (eq q u) (eq q v))))))))) (el t w)))))) (el v y))))))) (el z y)))))))).
+    pose (S3 := (andeld S2)).
+    pose (S4 := (andeld S3)).
+    pose (S5 := (anderd S3)).
+    pose (S6 := (ax_specd Vx S5)).
+    pose (S7 := (mpd S4 S6)).
+    pose (S8 := (anderd S7)).
+    enough (S9 : forall (w : Type) (Vw : (set w)), (impl (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u x)))) (el v w))))) (ex (fun (w : Type) => (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u x)))) (el v w)))))))).
+    pose (S10 := (impliri (and (and (el x y) (all (fun (z : Type) => (impl (el z y) (and (all (fun (w : Type) => (impl (all (fun (v : Type) => (impl (el v w) (el v z)))) (el w y)))) (ex (fun (w : Type) => (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u z)))) (el v w)))))))))))) (all (fun (z : Type) => (impl (all (fun (w : Type) => (impl (el w z) (el w y)))) (or (ex (fun (w : Type) => (and (and (and (all (fun (v : Type) => (impl (el v w) (ex (fun (u : Type) => (ex (fun (t : Type) => (all (fun (s : Type) => (bi (el s v) (or (all (fun (r : Type) => (bi (el r s) (eq r u)))) (all (fun (r : Type) => (bi (el r s) (or (eq r u) (eq r t)))))))))))))))) (and (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q u))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q v)))) (all (fun (q : Type) => (bi (el q r) (or (eq q v) (eq q t))))))))) (el s w))))) (eq u t)))))))) (all (fun (v : Type) => (all (fun (u : Type) => (all (fun (t : Type) => (impl (and (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q u)))) (all (fun (q : Type) => (bi (el q r) (or (eq q u) (eq q v))))))))) (el s w)))) (ex (fun (s : Type) => (and (all (fun (r : Type) => (bi (el r s) (or (all (fun (q : Type) => (bi (el q r) (eq q t)))) (all (fun (q : Type) => (bi (el q r) (or (eq q t) (eq q v))))))))) (el s w))))) (eq u t)))))))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q v)))) (all (fun (q : Type) => (bi (el q s) (or (eq q v) (eq q u))))))))) (el t w)))))) (el v z))))) (all (fun (v : Type) => (bi (ex (fun (u : Type) => (ex (fun (t : Type) => (and (all (fun (s : Type) => (bi (el s t) (or (all (fun (q : Type) => (bi (el q s) (eq q u)))) (all (fun (q : Type) => (bi (el q s) (or (eq q u) (eq q v))))))))) (el t w)))))) (el v y))))))) (el z y)))))) (ax_gen S9))).
+    pose (S11 := (exed S10 S8)).
+    exact (sep_pruned S11).
+    intros.
+    pose (S9 := (id (and (el w y) (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u x)))) (el v w))))))).
+    pose (S10 := (anderd S9)).
+    exact (exid Vw (fun (w : Type) => (all (fun (v : Type) => (impl (all (fun (u : Type) => (impl (el u v) (el u x)))) (el v w))))) S10).
 Qed.
