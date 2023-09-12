@@ -1,0 +1,9 @@
+# Editor
+.vscode
+
+# Coq artifacts
+*.aux
+*.glob
+*.vo
+*.vok
+*.vos
