@@ -1,6 +1,4 @@
 Require Import Ltac2.Ltac2.
-Set Default Proof Mode "Ltac2".
-
 Require Import axiom.
 
 Theorem scharle2 : forall (p q r s t : Prop), (stroke (stroke t (stroke s (stroke s s))) (stroke (stroke (stroke p (stroke q r)) t) (stroke (stroke p (stroke q r)) t))).
