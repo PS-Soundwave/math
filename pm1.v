@@ -33,11 +33,15 @@ Proof.
     exact (mp (taut p) (impl_intro (or p p) p)).
 Qed.
 
+Definition taut := pm1_2.
+
 Theorem pm1_3 : forall (p q : Prop), (impl q (or p q)).
 Proof.
     intros.
     exact (mp (add (stroke p p) q) (impl_intro q (or p q))).
 Qed.
+
+Definition add := pm1_3.
 
 Theorem pm1_4 : forall (p q : Prop), (impl (or p q) (or q p)).
 Proof.
@@ -45,11 +49,15 @@ Proof.
     exact (mp (perm (stroke q q) (stroke p p)) (impl_intro (or p q) (or q p))).
 Qed.
 
+Definition perm := pm1_4.
+
 Theorem pm1_5 : forall (p q r : Prop), (impl (or p (or q r)) (or q (or p r))).
 Proof.
     intros.
     exact (mp (assoc (stroke p p) (stroke q q) (stroke r r)) (impl_intro (or p (or q r)) (or q (or p r)))).
 Qed.
+
+Definition assoc := pm1_5.
 
 Theorem pm1_6 : forall (p q r : Prop), (impl (impl q r) (impl (or p q) (or p r))).
 Proof.
@@ -60,3 +68,5 @@ Proof.
     pose (S4 := (mp S2 S3)).
     exact (mp S4 (impl_intro (impl q r) (impl (or p q) (or p r)))).
 Qed.
+
+Definition sum := pm1_6.
