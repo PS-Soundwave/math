@@ -70,3 +70,5 @@ Proof.
 Qed.
 
 Definition sum := pm1_6.
+
+Definition mp {p q : Prop} (min : p) (maj : (impl p q)) := (pm1_11 min maj).
