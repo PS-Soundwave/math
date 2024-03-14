@@ -1,0 +1,3 @@
+Class Universe := {
+    U : Type
+}.

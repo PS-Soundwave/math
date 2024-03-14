@@ -1,4 +1,4 @@
-Axiom stroke : forall (p q : Prop), Prop.
+Axiom stroke : forall (_ _ : Prop), Prop.
 
 Axiom mp : forall {p q r : Prop} (min : p) (maj : (stroke p (stroke q r))), r.
 

@@ -1,0 +1,3 @@
+Class Proposition := {
+    prop : Prop
+}.
